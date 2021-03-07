@@ -1,6 +1,7 @@
 plugins {
     java
-    kotlin("jvm") version "1.4.31"
+    // beware to not silently import kotlin stdlib code into java
+    // kotlin("jvm") version "1.4.31"
 }
 
 group = "org.example"
@@ -11,6 +12,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
+    // implementation(kotlin("stdlib"))
     testCompile("junit", "junit", "4.12")
 }

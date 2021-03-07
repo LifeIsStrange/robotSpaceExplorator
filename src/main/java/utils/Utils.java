@@ -1,6 +1,7 @@
+package utils;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -43,4 +44,8 @@ public class Utils {
         }
     }
 
+    public static int getRandomNumberInRange(long min, long max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
 }
+

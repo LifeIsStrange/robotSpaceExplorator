@@ -5,7 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5c1a0c8-807e-4c59-b5fa-e0ff17c714c9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/component.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Component.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/mission.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Mission.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/network.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Network.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/robotSpaceExplorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/RobotSpaceExplorator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +53,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="1pR7DrNH97J8fKLIkMIvelH52RP" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -58,8 +80,8 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunManager">
-    <configuration name="robotSpaceExplorator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="robotSpaceExplorator" />
+    <configuration name="RobotSpaceExplorator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="RobotSpaceExplorator" />
       <module name="robotSpaceExplorator.main" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -78,7 +100,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.robotSpaceExplorator" />
+        <item itemvalue="Application.RobotSpaceExplorator" />
       </list>
     </recent_temporary>
   </component>
@@ -91,7 +113,7 @@
       <option name="presentableId" value="Default" />
       <updated>1615133933391</updated>
       <workItem from="1615133935781" duration="8000" />
-      <workItem from="1615134409018" duration="4454000" />
+      <workItem from="1615134409018" duration="11598000" />
     </task>
     <servers />
   </component>
