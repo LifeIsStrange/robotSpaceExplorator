@@ -9,9 +9,20 @@ import utils.Utils;
 
 public class Mission implements Runnable {
     /** time is simulated by considering months as seconds */
-    static long defaultMinStageTime = 1000L;
-    static long defaultMaxStageTime = 5000L;
+    static float defaultMinStageTime = 1000F;
+    static float defaultMaxStageTime = 5000F;
 
+    // in seconds
+    float startTime = Utils.getRandomNumberInRange(100F, 3000F);
+    long missionId = Thread.currentThread().getId();
+    // todo get random component list, destination and network
+    // in tons
+    float fuel = Utils.getRandomNumberInRange(10F, 100000F);
+
+
+    public Mission() {
+
+    }
 
     // A variable burst of reports and
     // commands are sent at the transition between mission stages.
@@ -21,8 +32,8 @@ public class Mission implements Runnable {
         System.out.println("entering interplanetary transit stage..");
         try {
             // todo failure rate 10% min
-            
-            Thread.sleep(Utils.getRandomNumberInRange(defaultMinStageTime, defaultMaxStageTime));
+
+            Thread.sleep((long) Utils.getRandomNumberInRange(defaultMinStageTime, defaultMaxStageTime));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -34,7 +45,7 @@ public class Mission implements Runnable {
     private void explorationStage() {
         System.out.println("entering exploration stage..");
         try {
-            Thread.sleep(Utils.getRandomNumberInRange(defaultMinStageTime, defaultMaxStageTime));
+            Thread.sleep((long) Utils.getRandomNumberInRange(defaultMinStageTime, defaultMaxStageTime));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

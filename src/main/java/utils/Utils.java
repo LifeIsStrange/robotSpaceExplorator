@@ -44,8 +44,8 @@ public class Utils {
         }
     }
 
-    public static int getRandomNumberInRange(long min, long max) {
-        return (int) ((Math.random() * (max - min)) + min);
+    public static float getRandomNumberInRange(float min, float max) {
+        return (float) ((Math.random() * (max - min)) + min);
     }
 }
 
