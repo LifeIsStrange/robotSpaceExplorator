@@ -1,7 +1,10 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     java
     // beware to not silently import kotlin stdlib code into java
     // kotlin("jvm") version "1.4.31"
+    kotlin("jvm") version "1.4.31"
 }
 
 group = "org.example"
@@ -14,4 +17,14 @@ repositories {
 dependencies {
     // implementation(kotlin("stdlib"))
     testCompile("junit", "junit", "4.12")
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }
