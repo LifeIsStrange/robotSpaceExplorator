@@ -1,5 +1,10 @@
 package coreClasses;
 
+import utils.Utils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,7 +33,7 @@ public class Controller {
         ExecutorService executor = Executors.newFixedThreadPool(numberOfSimultaneousMissions);
 
         for (int threadIdx : range(numberOfSimultaneousMissions)) {
-            Runnable mission = new Mission();
+            Runnable mission = new Mission(this.getRandomizedComponentList());
             executor.execute(mission);
         }
         executor.shutdown();
@@ -36,5 +41,18 @@ public class Controller {
         while (!executor.isTerminated()) {}
 
         System.out.println("All the missions have been completed!");
+    }
+
+    private List<Component> getRandomizedComponentList() {
+        var componentList = new ArrayList<Component>();
+
+        for (var componentType : ComponentType.values()) {
+            var numberOfOccurrencesOfThisComponent = (int) Utils.getRandomNumberInRange(1F, 10F);
+
+            for (int occurrenceIdx : range(numberOfOccurrencesOfThisComponent)) {
+                componentList.add(new Component(componentType));
+            }
+        }
+        return componentList;
     }
 }

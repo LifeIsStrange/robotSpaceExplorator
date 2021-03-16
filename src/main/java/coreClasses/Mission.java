@@ -3,6 +3,8 @@ package coreClasses;
 import utils.Range;
 import utils.Utils;
 
+import java.util.List;
+
 /**
  * this class is responsible for the scheduling of a Mission
  */
@@ -15,13 +17,30 @@ public class Mission implements Runnable {
     // in seconds
     float startTime = Utils.getRandomNumberInRange(100F, 3000F);
     long missionId = Thread.currentThread().getId();
-    // todo get random component list, destination and network
+    List<Component> componentList;
+    // todo get random destination and network
     // in tons
+    // todo fix fuel mismatch
     float fuel = Utils.getRandomNumberInRange(10F, 100000F);
 
 
-    public Mission() {
+    @Override
+    public void run() {
+        System.out.println(Thread.currentThread().getName() + " Mission starting.");
+    }
 
+    public Mission(List<Component> _componentList) {
+        componentList = _componentList;
+        System.out.println(Thread.currentThread().getName() + " Mission constructed.");
+        scheduleStages();
+    }
+
+    // todo allocate resources
+    private void scheduleStages() {
+        System.out.println("entering boost stage..");
+        this.transitStage();
+        System.out.println("entering landing stage..");
+        this.explorationStage();
     }
 
     // A variable burst of reports and
@@ -49,19 +68,5 @@ public class Mission implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    // todo allocate resources
-    private void scheduleStages() {
-        System.out.println("entering boost stage..");
-        this.transitStage();
-        System.out.println("entering landing stage..");
-        this.explorationStage();
-    }
-
-    @Override
-    public void run() {
-        System.out.println(Thread.currentThread().getName() + " Mission starting.");
-        scheduleStages();
     }
 }

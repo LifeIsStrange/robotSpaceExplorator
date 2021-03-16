@@ -13,7 +13,17 @@ import utils.Utils;
 // Network availability can be checked before a message is to be sent and if a network is
 // available then it can be used to transmit the full message
 
+enum ComponentType {
+        Fuel,
+        Thruster,
+        Instrument,
+        ControlSystem,
+        PowerPlant
+}
+
 public class Component {
+    public ComponentType componentType;
+
     // reports payload size in kilobytes
     // Reports can be telemetry (100-10k bytes, frequent) or
     // data (100k-100MB, periodic)
@@ -21,4 +31,9 @@ public class Component {
 
     // report rate in hours
     float reportRate = Utils.getRandomNumberInRange(0.30F, 24F * 7F);
+
+
+    public Component(ComponentType _componentType) {
+        componentType = _componentType;
+    }
 }
