@@ -1,5 +1,8 @@
-package coreClasses
+package coreClasses.controller
 
+import coreClasses.Component
+import coreClasses.Mission
+import coreClasses.Network
 import utils.Id
 import utils.Range
 import utils.Utils
@@ -35,45 +38,24 @@ object MissionScheduller {
     private fun initMissions(numberOfSimultaneousMissions: Int,   createSharedNetwork: (missionId: Id) -> Network) {
         for (threadIdx in 0 until numberOfSimultaneousMissions) {
             val missionId = Utils.generateUUID();
-            val mission =  Mission(missionId, getRandomizedComponentList(), createSharedNetwork(missionId))
+            val mission = Mission(missionId, getRandomizedComponentList(), createSharedNetwork(missionId))
 
-            this.missionList.add(mission)
+            missionList.add(mission)
         }
     }
 
     private fun executeMissions(executor: ExecutorService) {
-        this.missionList.forEach { executor.execute(it) }
+        missionList.forEach { executor.execute(it) }
     }
     fun scheduleMissions(numberOfSimultaneousMissions: Int,  createSharedNetwork: (missionId: Id) -> Network) {
         // might benefit from a ScheduledExecutorService or a forkJoinPool
         // note that we currently execute as much tasks as the threadPool size so there is no reuse ?
-        this.initMissions(numberOfSimultaneousMissions, createSharedNetwork)
+        initMissions(numberOfSimultaneousMissions, createSharedNetwork)
         val executor = Executors.newFixedThreadPool(numberOfSimultaneousMissions)
-        this.executeMissions(executor)
+        executeMissions(executor)
         executor.shutdown()
         // busy wait ?
         while (!executor.isTerminated) {}
         println("All the missions have been completed!")
     }
-}
-
-class Controller() {
-    private var networkMissionList = mutableListOf<Network>()
-    private var numberOfSimultaneousMissions = 2
-
-    init {
-        MissionScheduller.scheduleMissions(this.numberOfSimultaneousMissions, this::createSharedNetwork)
-    }
-
-    private fun createSharedNetwork(missionId: Id): Network {
-        var network = Network(missionId);
-
-        this.networkMissionList.add(network)
-        return network
-    }
-    //ChangeMissionStage
-    //Verify failure
-    //Send Instruction
-    //Software update
-
 }

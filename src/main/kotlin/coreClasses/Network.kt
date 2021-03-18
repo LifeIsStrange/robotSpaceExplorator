@@ -2,6 +2,7 @@ package coreClasses
 
 import utils.Id
 import java.util.*
+import java.util.concurrent.*
 
 /**
  * a Network is a communication channel between the mission Controller (on Earth),
@@ -22,5 +23,5 @@ class Message(
 
 class Network(
     var missionId: Id,
-    var messageQueue: MutableList<Message> = mutableListOf()
+    var messageQueue: ConcurrentLinkedQueue<Message> = ConcurrentLinkedQueue()
 )

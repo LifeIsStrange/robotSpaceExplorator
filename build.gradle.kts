@@ -4,7 +4,7 @@ plugins {
     java
     // beware to not silently import kotlin stdlib code into java
     // kotlin("jvm") version "1.4.31"
-    kotlin("jvm") version "1.4.31"
+    kotlin("jvm") version "1.4.21"
 }
 
 group = "org.example"

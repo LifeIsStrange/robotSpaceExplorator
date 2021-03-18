@@ -6,33 +6,33 @@ import utils.Utils
 /**
  * this class is responsible for the scheduling of a Mission
  */
+// todo get random destination and network
+// todo fix fuel mismatch
 class Mission(val id: Id, var componentList: List<Component>, var network: Network) : Runnable {
     companion object {
         /** time is simulated by considering months as seconds  */
         var defaultMinStageTime = 1000f
         var defaultMaxStageTime = 5000f
     }
-    // in seconds
     var startTime = Utils.getRandomNumberInRange(100f, 3000f)
     var missionId = Thread.currentThread().id
-    //lateinit var myComp: Component
-    // todo get random destination and network
-    // in tons
-    // todo fix fuel mismatch
-    var fuel = Utils.getRandomNumberInRange(10f, 100000f)
+
     override fun run() {
-        //this.myComp.showMessage()
         println(Thread.currentThread().name + " Mission starting.")
+        println(Thread.currentThread().name + " Mission constructed.")
+        scheduleStages()
     }
-    // todo allocate resources
+
     private fun scheduleStages() {
         this.boostStage()
+        this.network.messageQueue.offer(Message(content = "terminating boost stage"))
         this.transitStage()
+        this.network.messageQueue.offer(Message(content = "terminating transit stage"))
         this.landingStage()
         this.explorationStage()
     }
 
-    fun boostStage() {
+    private fun boostStage() {
         println("entering boost stage..")
     }
     // A variable burst of reports and
@@ -69,11 +69,5 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-    }
-
-
-    init {
-        println(Thread.currentThread().name + " Mission constructed.")
-        scheduleStages()
     }
 }

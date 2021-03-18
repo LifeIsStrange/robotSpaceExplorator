@@ -1,4 +1,4 @@
-import coreClasses.Controller
+import coreClasses.controller.Controller
 import utils.Utils
 
 object RobotSpaceExplorator {
