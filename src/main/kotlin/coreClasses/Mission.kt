@@ -24,15 +24,17 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
         //this.myComp.showMessage()
         println(Thread.currentThread().name + " Mission starting.")
     }
-
     // todo allocate resources
     private fun scheduleStages() {
-        println("entering boost stage..")
-        transitStage()
-        println("entering landing stage..")
-        explorationStage()
+        this.boostStage()
+        this.transitStage()
+        this.landingStage()
+        this.explorationStage()
     }
 
+    fun boostStage() {
+        println("entering boost stage..")
+    }
     // A variable burst of reports and
     // commands are sent at the transition between mission stages.
     // There are a variable number of types
@@ -48,6 +50,10 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
+    }
+
+    private fun landingStage() {
+        println("entering landing stage..")
     }
 
     // Time can simulated by allowing a fixed ratio of wall clock time to mission time eg 1 sec : 1
