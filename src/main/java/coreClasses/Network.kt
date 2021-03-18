@@ -1,5 +1,8 @@
 package coreClasses
 
+import utils.Id
+import java.util.*
+
 /**
  * a Network is a communication channel between the mission Controller (on Earth),
  * and the various components of a specific Mission.
@@ -11,4 +14,13 @@ package coreClasses
  */
 // The communication networks for a mission are a shared resource used by all mission
 // components, but each mission has its own network.
-class Network 
+
+class Message(
+    var content: String,
+    var response: String? = null
+)
+
+class Network(
+    var missionId: Id,
+    var messageQueue: MutableList<Message> = mutableListOf()
+)

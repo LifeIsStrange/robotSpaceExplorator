@@ -1,11 +1,12 @@
 package coreClasses
 
+import utils.Id
 import utils.Utils
 
 /**
  * this class is responsible for the scheduling of a Mission
  */
-class Mission(var componentList: List<Component>) : Runnable {
+class Mission(val id: Id, var componentList: List<Component>, var network: Network) : Runnable {
     companion object {
         /** time is simulated by considering months as seconds  */
         var defaultMinStageTime = 1000f

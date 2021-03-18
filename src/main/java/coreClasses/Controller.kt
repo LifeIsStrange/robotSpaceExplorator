@@ -1,5 +1,6 @@
 package coreClasses
 
+import utils.Id
 import utils.Range
 import utils.Utils
 import java.util.concurrent.ExecutorService
@@ -16,14 +17,8 @@ import kotlin.reflect.full.createInstance
     represent the communications networks (queues) too
  */
 // The mission controller is a shared resource used for all missions.
-
-class Controller {
-    var missionList :MutableList<Runnable> = mutableListOf();
-
-    companion object {
-        // 10 is the minimum per the requirements
-        var defaultNumberOfSimultaneousMissions = 2
-    }
+object MissionScheduller {
+    private var missionList :MutableList<Runnable> = mutableListOf();
 
     private fun getRandomizedComponentList(): List<Component> {
         val componentList = mutableListOf<Component>()
@@ -37,9 +32,11 @@ class Controller {
         return componentList
     }
 
-    private fun initMissions(numberOfSimultaneousMissions: Int) {
+    private fun initMissions(numberOfSimultaneousMissions: Int,   createSharedNetwork: (missionId: Id) -> Network) {
         for (threadIdx in 0..numberOfSimultaneousMissions) {
-            val mission =  Mission(getRandomizedComponentList())
+            val missionId = Utils.generateUUID();
+            val mission =  Mission(missionId, getRandomizedComponentList(), createSharedNetwork(missionId))
+
             this.missionList.add(mission)
         }
     }
@@ -47,10 +44,10 @@ class Controller {
     private fun executeMissions(executor: ExecutorService) {
         this.missionList.forEach { executor.execute(it) }
     }
-    fun scheduleMissions(numberOfSimultaneousMissions: Int) {
+    fun scheduleMissions(numberOfSimultaneousMissions: Int,  createSharedNetwork: (missionId: Id) -> Network) {
         // might benefit from a ScheduledExecutorService or a forkJoinPool
         // note that we currently execute as much tasks as the threadPool size so there is no reuse ?
-        this.initMissions(numberOfSimultaneousMissions)
+        this.initMissions(numberOfSimultaneousMissions, createSharedNetwork)
         val executor = Executors.newFixedThreadPool(numberOfSimultaneousMissions)
         this.executeMissions(executor)
         executor.shutdown()
@@ -58,4 +55,25 @@ class Controller {
         while (!executor.isTerminated) {}
         println("All the missions have been completed!")
     }
+}
+
+class Controller() {
+    private var networkMissionList = mutableListOf<Network>()
+    private var numberOfSimultaneousMissions = 2
+
+    init {
+        MissionScheduller.scheduleMissions(this.numberOfSimultaneousMissions, this::createSharedNetwork)
+    }
+
+    private fun createSharedNetwork(missionId: Id): Network {
+        var network = Network(missionId);
+
+        this.networkMissionList.add(network)
+        return network
+    }
+    //ChangeMissionStage
+    //Verify failure
+    //Send Instruction
+    //Software update
+
 }

@@ -6,6 +6,8 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
+typealias Id = String;
+
 object Utils {
     var defaultLogFileName = "output.dat"
 
@@ -44,5 +46,9 @@ object Utils {
 
     fun getRandomNumberInRange(min: Float, max: Float): Float {
         return (Math.random() * (max - min) + min).toFloat()
+    }
+
+    fun generateUUID(): String {
+        return java.util.UUID.randomUUID().toString()
     }
 }
