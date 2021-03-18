@@ -33,7 +33,7 @@ object MissionScheduller {
     }
 
     private fun initMissions(numberOfSimultaneousMissions: Int,   createSharedNetwork: (missionId: Id) -> Network) {
-        for (threadIdx in 0..numberOfSimultaneousMissions) {
+        for (threadIdx in 0 until numberOfSimultaneousMissions) {
             val missionId = Utils.generateUUID();
             val mission =  Mission(missionId, getRandomizedComponentList(), createSharedNetwork(missionId))
 
