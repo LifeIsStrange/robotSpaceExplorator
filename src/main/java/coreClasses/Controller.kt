@@ -2,6 +2,7 @@ package coreClasses
 
 import utils.Range
 import utils.Utils
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.reflect.full.createInstance
 
@@ -17,6 +18,8 @@ import kotlin.reflect.full.createInstance
 // The mission controller is a shared resource used for all missions.
 
 class Controller {
+    var missionList :MutableList<Runnable> = mutableListOf();
+
     companion object {
         // 10 is the minimum per the requirements
         var defaultNumberOfSimultaneousMissions = 2
@@ -34,15 +37,22 @@ class Controller {
         return componentList
     }
 
+    private fun initMissions(numberOfSimultaneousMissions: Int) {
+        for (threadIdx in 0..numberOfSimultaneousMissions) {
+            val mission =  Mission(getRandomizedComponentList())
+            this.missionList.add(mission)
+        }
+    }
+
+    private fun executeMissions(executor: ExecutorService) {
+        this.missionList.forEach { executor.execute(it) }
+    }
     fun scheduleMissions(numberOfSimultaneousMissions: Int) {
         // might benefit from a ScheduledExecutorService or a forkJoinPool
         // note that we currently execute as much tasks as the threadPool size so there is no reuse ?
+        this.initMissions(numberOfSimultaneousMissions)
         val executor = Executors.newFixedThreadPool(numberOfSimultaneousMissions)
-
-        for (threadIdx in 0..numberOfSimultaneousMissions) {
-            val mission: Runnable = Mission(getRandomizedComponentList())
-            executor.execute(mission)
-        }
+        this.executeMissions(executor)
         executor.shutdown()
         // busy wait ?
         while (!executor.isTerminated) {}

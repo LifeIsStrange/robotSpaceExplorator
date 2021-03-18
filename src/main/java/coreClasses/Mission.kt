@@ -6,6 +6,11 @@ import utils.Utils
  * this class is responsible for the scheduling of a Mission
  */
 class Mission(var componentList: List<Component>) : Runnable {
+    companion object {
+        /** time is simulated by considering months as seconds  */
+        var defaultMinStageTime = 1000f
+        var defaultMaxStageTime = 5000f
+    }
     // in seconds
     var startTime = Utils.getRandomNumberInRange(100f, 3000f)
     var missionId = Thread.currentThread().id
@@ -59,11 +64,6 @@ class Mission(var componentList: List<Component>) : Runnable {
         }
     }
 
-    companion object {
-        /** time is simulated by considering months as seconds  */
-        var defaultMinStageTime = 1000f
-        var defaultMaxStageTime = 5000f
-    }
 
     init {
         println(Thread.currentThread().name + " Mission constructed.")

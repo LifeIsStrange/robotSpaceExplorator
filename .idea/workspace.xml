@@ -5,33 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5c1a0c8-807e-4c59-b5fa-e0ff17c714c9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/RobotSpaceExplorator.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Controller.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Mission.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/Range.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/Utils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/robotSpaceExplorator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/robotSpaceExplorator.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/RobotSpaceExplorator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/Component.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Component.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/Controller.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/Mission.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/Network.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Network.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Range.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Utils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/RobotSpaceExplorator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/RobotSpaceExplorator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/Controller.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Controller.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/coreClasses/Mission.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/coreClasses/Mission.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,17 +37,6 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="robotSpaceExplorator" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="robotSpaceExplorator" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="robotSpaceExplorator" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -187,7 +158,10 @@
       <updated>1615133933391</updated>
       <workItem from="1615133935781" duration="8000" />
       <workItem from="1615134409018" duration="15065000" />
-      <workItem from="1615905011947" duration="14200000" />
+      <workItem from="1615905011947" duration="14841000" />
+      <workItem from="1615987716166" duration="978000" />
+      <workItem from="1615988704691" duration="436000" />
+      <workItem from="1615989190068" duration="3871000" />
     </task>
     <servers />
   </component>
