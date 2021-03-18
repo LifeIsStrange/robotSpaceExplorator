@@ -20,27 +20,28 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
     override fun run() {
         println(Thread.currentThread().name + " Mission starting.")
         println(Thread.currentThread().name + " Mission constructed.")
+        println("---------")
         scheduleStages()
     }
 
     private fun scheduleStages() {
         this.boostStage()
-        this.network.messageQueue.offer(Message(content = "terminating boost stage"))
+        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage"))
         this.transitStage()
-        this.network.messageQueue.offer(Message(content = "terminating transit stage"))
+        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage"))
         this.landingStage()
         this.explorationStage()
     }
 
     private fun boostStage() {
-        println("entering boost stage..")
+        println(Thread.currentThread().name + " entering boost stage..")
     }
     // A variable burst of reports and
     // commands are sent at the transition between mission stages.
     // There are a variable number of types
     // of commands and reports for each mission.
     private fun transitStage() {
-        println("entering interplanetary transit stage..")
+        println(Thread.currentThread().name + " entering interplanetary transit stage..")
         try {
             // todo failure rate 10% min
             Thread.sleep(
@@ -53,14 +54,14 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
     }
 
     private fun landingStage() {
-        println("entering landing stage..")
+        println(Thread.currentThread().name + " entering landing stage..")
     }
 
     // Time can simulated by allowing a fixed ratio of wall clock time to mission time eg 1 sec : 1
     // month.
     // When waiting a mission 'sleeps'.
     private fun explorationStage() {
-        println("entering exploration stage..")
+        println(Thread.currentThread().name + " entering exploration stage..")
         try {
             Thread.sleep(
                 Utils.getRandomNumberInRange(defaultMinStageTime, defaultMaxStageTime)

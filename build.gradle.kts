@@ -19,6 +19,7 @@ dependencies {
     testCompile("junit", "junit", "4.12")
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {

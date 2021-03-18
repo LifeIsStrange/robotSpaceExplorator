@@ -35,7 +35,7 @@ object MissionScheduller {
         return componentList
     }
 
-    private fun initMissions(numberOfSimultaneousMissions: Int,   createSharedNetwork: (missionId: Id) -> Network) {
+    fun initMissions(numberOfSimultaneousMissions: Int,   createSharedNetwork: (missionId: Id) -> Network) {
         for (threadIdx in 0 until numberOfSimultaneousMissions) {
             val missionId = Utils.generateUUID();
             val mission = Mission(missionId, getRandomizedComponentList(), createSharedNetwork(missionId))
@@ -50,7 +50,7 @@ object MissionScheduller {
     fun scheduleMissions(numberOfSimultaneousMissions: Int,  createSharedNetwork: (missionId: Id) -> Network) {
         // might benefit from a ScheduledExecutorService or a forkJoinPool
         // note that we currently execute as much tasks as the threadPool size so there is no reuse ?
-        initMissions(numberOfSimultaneousMissions, createSharedNetwork)
+        //initMissions(numberOfSimultaneousMissions, createSharedNetwork)
         val executor = Executors.newFixedThreadPool(numberOfSimultaneousMissions)
         executeMissions(executor)
         executor.shutdown()
