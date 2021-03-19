@@ -10,17 +10,17 @@ class Controller() {
     private var numberOfSimultaneousMissions = 2
     private var missionsExecutor: ExecutorService = Executors.newFixedThreadPool(this.numberOfSimultaneousMissions)
     private var controllerNetworkMissionSchedullerExecutor = Executors.newFixedThreadPool(this.numberOfSimultaneousMissions)
-    private var missionScheduller: MissionScheduller = MissionScheduller(this.numberOfSimultaneousMissions, missionsExecutor)
+    private var controllerMissionsExecutor: ControllerMissionsExecutor = ControllerMissionsExecutor(this.numberOfSimultaneousMissions, missionsExecutor)
 
     init {
-        this.missionScheduller.scheduleMissions(this::createSharedNetwork)
+        this.controllerMissionsExecutor.scheduleMissions(this::createSharedNetwork)
         missionsExecutor.shutdown()
         this.executeConcurrentNetworkMissionSchedulers()
         this.shutdownAllThreadServicesWhenTerminated()
     }
 
     private fun shutdownAllThreadServicesWhenTerminated() {
-        this.missionScheduller.shutdownMissionsWhenTerminated()
+        this.controllerMissionsExecutor.shutdownMissionsWhenTerminated()
         this.shutdownNetworkMissionSchedulersWhenTerminated()
     }
 

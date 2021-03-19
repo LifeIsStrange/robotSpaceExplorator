@@ -5,42 +5,23 @@ import coreClasses.Message
 import coreClasses.MessageType
 import coreClasses.NetworkChannel
 import coreClasses.network.Network
+import coreClasses.network.NetworkControllerService
 import utils.next
 import java.util.concurrent.ExecutorService
 
 class ControllerNetworkMissionScheduller(
-    override var networkChannel: NetworkChannel,
-    private var missionsExecutor: ExecutorService) : Runnable, Network() {
+    private var networkChannel: NetworkChannel,
+    private var missionsExecutor: ExecutorService): Runnable {
 
-    override fun listenIncommingMessage(): Message? {
-        var msg: Message? = networkChannel.messageQueue.firstOrNull()
-
-        if (msg?.emitterType == EmitterType.Mission) {
-            networkChannel.messageQueue.poll()
-        }
-        return msg;
-    }
-
-    //sendMessageAuthorizationNextStage
-    override fun sendMessage(receivedMessageType: MessageType?, messageContent: String, newMessageType: MessageType) {
-        if (receivedMessageType != MessageType.Exploration) {
-            this.networkChannel.messageQueue.add(
-                Message(
-                    messageContent,
-                    emitterType = EmitterType.Controller,
-                    messageType = newMessageType
-                )
-            )
-        }
-    }
+    val controllerNetworkService = NetworkControllerService(networkChannel)
 
     override fun run() {
         while(!this.missionsExecutor.isTerminated) {
-            val msg = this.listenIncommingMessage()
+            val msg = this.controllerNetworkService.listenIncommingMessage()
 
             if (msg?.emitterType == EmitterType.Mission) {
                 println(msg.content)
-                this.sendMessage(
+                this.controllerNetworkService.sendMessage(
                     receivedMessageType = msg.messageType,
                     messageContent = "end of stage: ${networkChannel.missionId} ${msg.messageType} accepted, you can go on ${msg.messageType.next()}",
                     newMessageType = msg.messageType.next()

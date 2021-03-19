@@ -19,8 +19,8 @@ import kotlin.reflect.full.createInstance
     represent the communications networks (queues) too
  */
 // The mission controller is a shared resource used for all missions.
-class MissionScheduller(private var numberOfSimultaneousMissions: Int, private var executor: ExecutorService) {
-    private var missionList :MutableList<Runnable> = mutableListOf();
+class ControllerMissionsExecutor(private var numberOfSimultaneousMissions: Int, private var executor: ExecutorService) {
+    private var missionList :MutableList<Mission> = mutableListOf();
 
     private fun getRandomizedComponentList(): List<Component> {
         val componentList = mutableListOf<Component>()
