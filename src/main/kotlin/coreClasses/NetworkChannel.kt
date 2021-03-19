@@ -32,7 +32,7 @@ class Message(
     var messageType: MessageType,
 )
 
-class Network(
+class NetworkChannel(
     var missionId: Id,
     var messageQueue: ConcurrentLinkedQueue<Message> = ConcurrentLinkedQueue()
 )

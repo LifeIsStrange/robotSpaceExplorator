@@ -1,5 +1,7 @@
-package coreClasses
+package coreClasses.mission
 
+import coreClasses.*
+import coreClasses.network.Network
 import utils.Id
 import utils.Utils
 
@@ -8,7 +10,7 @@ import utils.Utils
  */
 // todo get random destination and network
 // todo fix fuel mismatch
-class Mission(val id: Id, var componentList: List<Component>, var network: Network) : Runnable {
+class Mission(val id: Id, var componentList: List<Component>, override var networkChannel: NetworkChannel) : Runnable, Network() {
     companion object {
         /** time is simulated by considering months as seconds  */
         var defaultMinStageTime = 1000f
@@ -31,20 +33,23 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
         this.explorationStage()
     }
 
-    private fun receiveStageAnswer() {
+    private fun receiveStageAnswer(): Message? {
+        var msg: Message? = null;
         while (true) {
-            var msg = this.network.messageQueue.firstOrNull()
+            msg = this.networkChannel.messageQueue.firstOrNull()
 
             if (msg?.emitterType == EmitterType.Controller) {
                 println(msg.content)
-                this.network.messageQueue.poll()
-                return
+                this.networkChannel.messageQueue.poll()
+                return msg
             }
         }
+        return msg
     }
     private fun boostStage() {
         println(Thread.currentThread().name + " entering boost stage..")
-        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage", EmitterType.Mission, MessageType.Boost))
+        this.sendMessage(messageContent = "${Thread.currentThread().name} terminating boost stage", newMessageType = MessageType.Boost )
+        //this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage", EmitterType.Mission, MessageType.Boost))
         this.receiveStageAnswer()
     }
     // A variable burst of reports and
@@ -62,13 +67,15 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Transit))
+        this.sendMessage(messageContent = "${Thread.currentThread().name} terminating transit stage", newMessageType = MessageType.Transit )
+        //this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Transit))
         this.receiveStageAnswer()
     }
 
     private fun landingStage() {
         println(Thread.currentThread().name + " entering landing stage..")
-        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Landing))
+        this.sendMessage(messageContent = "${Thread.currentThread().name} terminating transit stage", newMessageType = MessageType.Landing )
+        //this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Landing))
         this.receiveStageAnswer()
     }
 
@@ -85,6 +92,21 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Exploration))
+        this.sendMessage(messageContent = "${Thread.currentThread().name} terminating transit stage", newMessageType = MessageType.Exploration )
+        //this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Exploration))
+    }
+
+    override fun listenIncommingMessage(): Message? {
+        return this.receiveStageAnswer()
+    }
+
+    override fun sendMessage(receivedMessageType: MessageType?, messageContent: String, newMessageType: MessageType) {
+        this.networkChannel.messageQueue.offer(
+            Message(
+                content = messageContent,
+                EmitterType.Mission,
+                newMessageType
+            )
+        )
     }
 }

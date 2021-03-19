@@ -1,13 +1,12 @@
 package coreClasses.controller
 
 import coreClasses.Component
-import coreClasses.Mission
-import coreClasses.Network
+import coreClasses.mission.Mission
+import coreClasses.NetworkChannel
 import utils.Id
 import utils.Range
 import utils.Utils
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import kotlin.reflect.full.createInstance
 
 /**
@@ -35,10 +34,10 @@ class MissionScheduller(private var numberOfSimultaneousMissions: Int, private v
         return componentList
     }
 
-    private fun initMissions(createSharedNetwork: (missionId: Id) -> Network) {
+    private fun initMissions(createSharedNetworkChannel: (missionId: Id) -> NetworkChannel) {
         for (threadIdx in 0 until this.numberOfSimultaneousMissions) {
             val missionId = Utils.generateUUID();
-            val mission = Mission(missionId, getRandomizedComponentList(), createSharedNetwork(missionId))
+            val mission = Mission(missionId, getRandomizedComponentList(), createSharedNetworkChannel(missionId))
 
             missionList.add(mission)
         }
@@ -54,11 +53,11 @@ class MissionScheduller(private var numberOfSimultaneousMissions: Int, private v
         println("All the missions have been completed!")
     }
 
-    fun scheduleMissions(createSharedNetwork: (missionId: Id) -> Network) {
+    fun scheduleMissions(createSharedNetworkChannel: (missionId: Id) -> NetworkChannel) {
         // might benefit from a ScheduledExecutorService or a forkJoinPool
         // note that we currently execute as much tasks as the threadPool size so there is no reuse ?
         //initMissions(numberOfSimultaneousMissions, createSharedNetwork)
-        this.initMissions(createSharedNetwork)
+        this.initMissions(createSharedNetworkChannel)
         this.executeMissions()
     }
 }
