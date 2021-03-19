@@ -5,6 +5,7 @@ plugins {
     // beware to not silently import kotlin stdlib code into java
     // kotlin("jvm") version "1.4.31"
     kotlin("jvm") version "1.4.21"
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
 }
 
 group = "org.example"
