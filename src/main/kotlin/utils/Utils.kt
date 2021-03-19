@@ -1,5 +1,6 @@
 package utils
 
+import kotlinx.coroutines.delay
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -62,6 +63,11 @@ object Utils {
             e.printStackTrace()
         }
     }
+
+    suspend fun delay(time: MilliSeconds) {
+        delay(time.toLong())
+    }
+
 }
 inline fun <reified T : Enum<T>> T.next(): T {
     val values = enumValues<T>()

@@ -5,6 +5,7 @@ import coreClasses.network.MessageType
 import coreClasses.network.NetworkChannel
 import coreClasses.network.NetworkServiceMissionService
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import utils.Id
 import utils.Utils
@@ -117,19 +118,19 @@ class Mission(
         val destinationDistanceQuartile = destination.distance / 4f
 
         GlobalScope.launch {
-            Utils.sleep(transitStepTime)
+            Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 1 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 2)
             degradeAndSendComponentsMessages()
-            Utils.sleep(transitStepTime)
+            Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 2 in progress, middle of the mission: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 3)
             degradeAndSendComponentsMessages()
-            Utils.sleep(transitStepTime)
+            Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 3 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit,  distanceFromEarthQuintile = 4)
             degradeAndSendComponentsMessages()
-            Utils.sleep(transitStepTime)
+            Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             missionNetworkService.sendMessage(messageContent = "Mission: $missionId transit stage ended: we are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached!", newMessageType = MessageType.TransitStage, distanceFromEarthQuintile = 5)
         }
