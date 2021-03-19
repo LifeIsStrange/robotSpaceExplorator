@@ -7,6 +7,8 @@ import coreClasses.network.NetworkServiceMissionService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import utils.ANSI_RED
+import utils.ANSI_RESET
 import utils.Id
 import utils.Utils
 import java.util.concurrent.atomic.AtomicReference
@@ -120,19 +122,19 @@ class Mission(
         GlobalScope.launch {
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 1 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 2)
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId $ANSI_RED inter transit stage 1 $ANSI_RESET in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 2)
             degradeAndSendComponentsMessages()
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 2 in progress, middle of the mission: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 3)
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId $ANSI_RED inter transit stage 2 $ANSI_RESET in progress, middle of the mission: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 3)
             degradeAndSendComponentsMessages()
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 3 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit,  distanceFromEarthQuintile = 4)
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId $ANSI_RED inter transit stage 3 $ANSI_RESET in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit,  distanceFromEarthQuintile = 4)
             degradeAndSendComponentsMessages()
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId transit stage ended: we are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached!", newMessageType = MessageType.TransitStage, distanceFromEarthQuintile = 5)
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId $ANSI_RED transit stage ended: $ANSI_RESET we are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached!", newMessageType = MessageType.TransitStage, distanceFromEarthQuintile = 5)
         }
         this.missionNetworkService.listenIncommingMessage()
     }

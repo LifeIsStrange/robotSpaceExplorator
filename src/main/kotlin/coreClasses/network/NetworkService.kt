@@ -35,7 +35,7 @@ abstract class NetworkService {
 
     fun simulateTimeToTransferMessage(sizeMessage: KBs, distanceFromEarthQuartile: Int) {
         try {
-            Thread.sleep(this.getTotalTimeForAMessageToTransmit(sizeMessage, distanceFromEarthQuartile).toLong())
+            Thread.sleep(this.getTotalTimeForAMessageToTransmit(sizeMessage, distanceFromEarthQuartile).toLong() / 10)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }

@@ -12,6 +12,7 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
 
             if (msg?.emitterType == EmitterType.Controller) {
                 Utils.log(msg.content)
+                //println(msg.content)
                 this.networkChannel.messageQueue.poll()
                 return msg
             }
