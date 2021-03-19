@@ -1,7 +1,7 @@
 package coreClasses.controller
 
-import coreClasses.EmitterType
-import coreClasses.NetworkChannel
+import coreClasses.network.EmitterType
+import coreClasses.network.NetworkChannel
 import coreClasses.network.NetworkServiceControllerService
 import utils.next
 import java.util.concurrent.ExecutorService
@@ -17,11 +17,11 @@ class ControllerNetworkMissionScheduller(
         while (!this.missionsExecutor.isTerminated) {
             val msg = this.controllerNetworkService.listenIncommingMessage()
 
-            if (msg?.emitterType == EmitterType.Mission) {
+            if (msg?.emitterType == EmitterType.Mission && msg.messageType.name.endsWith("Stage") ) {
                 println(msg.content)
                 this.controllerNetworkService.sendMessage(
                     receivedMessageType = msg.messageType,
-                    messageContent = "end of stage: ${networkChannel.missionId} ${msg.messageType} accepted, you can go on ${msg.messageType.next()}",
+                    messageContent = "end of stage: \"${msg.messageType}\" accepted, you can go on ${msg.messageType.next()}",
                     newMessageType = msg.messageType.next()
                 )
             }

@@ -1,7 +1,7 @@
 package coreClasses.controller
 
 import coreClasses.Component
-import coreClasses.NetworkChannel
+import coreClasses.network.NetworkChannel
 import coreClasses.mission.Destination
 import coreClasses.mission.Mission
 import utils.Id

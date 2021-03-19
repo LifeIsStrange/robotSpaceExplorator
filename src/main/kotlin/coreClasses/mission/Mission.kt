@@ -1,6 +1,8 @@
 package coreClasses.mission
 
 import coreClasses.*
+import coreClasses.network.MessageType
+import coreClasses.network.NetworkChannel
 import coreClasses.network.NetworkServiceMissionService
 import utils.Id
 import utils.Utils
@@ -12,12 +14,12 @@ import utils.Utils
 // todo fix fuel mismatch
 class Destination(val name: String, val distance: Float)
 
+//TODO change thread name by ID
 class Mission(
-      val id: Id,
-      var componentList: List<Component>,
-      private var networkChannel: NetworkChannel,
-      private var destination: Destination
-    ) : Runnable {
+    val id: Id,
+    var componentList: List<Component>,
+    private var networkChannel: NetworkChannel,
+    private var destination: Destination) : Runnable {
     private var missionNetworkService = NetworkServiceMissionService(networkChannel)
 
     companion object {
@@ -44,7 +46,7 @@ class Mission(
 
     private fun boostStage() {
         println(Thread.currentThread().name + " entering boost stage..")
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating boost stage", newMessageType = MessageStageType.Boost)
+        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating boost stage", newMessageType = MessageType.BoostStage)
         // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage", EmitterType.Mission, MessageType.Boost))
         this.missionNetworkService.receiveStageAnswer()
     }
@@ -63,14 +65,14 @@ class Mission(
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating transit stage", newMessageType = MessageStageType.Transit)
+        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating transit stage", newMessageType = MessageType.TransitStage)
         // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Transit))
         this.missionNetworkService.receiveStageAnswer()
     }
 
     private fun landingStage() {
         println(Thread.currentThread().name + " entering landing stage..")
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating landing stage", newMessageType = MessageStageType.Landing)
+        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating landing stage", newMessageType = MessageType.LandingStage)
         // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Landing))
         this.missionNetworkService.receiveStageAnswer()
     }
@@ -88,7 +90,7 @@ class Mission(
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating exploration stage", newMessageType = MessageStageType.Exploration)
+        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating exploration stage", newMessageType = MessageType.ExplorationStage)
         // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Exploration))
     }
 }

@@ -1,10 +1,5 @@
 package coreClasses.network
 
-import coreClasses.EmitterType
-import coreClasses.Message
-import coreClasses.MessageStageType
-import coreClasses.NetworkChannel
-
 class NetworkServiceControllerService(override var networkChannel: NetworkChannel) : NetworkService() {
 
     public override fun listenIncommingMessage(): Message? {
@@ -17,14 +12,16 @@ class NetworkServiceControllerService(override var networkChannel: NetworkChanne
     }
 
     // sendMessageAuthorizationNextStage
-    public override fun sendMessage(receivedMessageType: MessageStageType?, messageContent: String, newMessageType: MessageStageType) {
+    public override fun sendMessage(receivedMessageType: MessageType?, messageContent: String, newMessageType: MessageType) {
         this.setBestPossibleAvailableNetworkBandWidth()
-        if (receivedMessageType != MessageStageType.Exploration) {
+        if (receivedMessageType != MessageType.ExplorationStage) {
+            val sizeMessage = this.getPayloadSizeForMessageType(newMessageType)
             this.networkChannel.messageQueue.add(
                 Message(
-                    messageContent,
+                    this.addHeaderToMessageContent(messageContent, sizeMessage, networkChannel.missionId),
                     emitterType = EmitterType.Controller,
-                    messageType = newMessageType
+                    messageType = newMessageType,
+                    sizeMessage
                 )
             )
         }

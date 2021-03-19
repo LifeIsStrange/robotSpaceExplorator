@@ -1,6 +1,6 @@
 package coreClasses.controller
 
-import coreClasses.NetworkChannel
+import coreClasses.network.NetworkChannel
 import utils.Id
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors

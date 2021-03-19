@@ -1,4 +1,4 @@
-package coreClasses
+package coreClasses.network
 
 import utils.Id
 import java.util.concurrent.*
@@ -25,27 +25,22 @@ enum class EmitterType {
 // software update
 // stage 1kb
 
-sealed interface MessageType
-    enum class MessageStageType : MessageType {
-        Boost,
-        Transit,
-        Landing,
-        Exploration
-    }
-
-    class SoftwareUpdate : MessageType
-    class Telemetry : MessageType
-    class Data : MessageType
-
-
-
+enum class MessageType {
+    Data,
+    Telemetry,
+    SoftwareUpdate,
+    BoostStage,
+    TransitStage,
+    LandingStage,
+    ExplorationStage
+}
 
 
 class Message(
     val content: String,
     val emitterType: EmitterType,
-    val messageType: MessageStageType,
-    //var payloadSize: Int
+    val messageType: MessageType,
+    var payloadSize: Float
 )
 
 class NetworkChannel(
