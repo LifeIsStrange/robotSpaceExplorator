@@ -35,15 +35,14 @@ class Controller() {
     }
 
     private fun createSharedNetwork(missionId: Id): NetworkChannel {
-        var network = NetworkChannel(missionId);
+        var network = NetworkChannel(missionId)
 
         this.networkMissionList.add(network)
         return network
     }
 
-    //ChangeMissionStage
-    //Verify failure
-    //Send Instruction
-    //Software update
-
+    // ChangeMissionStage
+    // Verify failure
+    // Send Instruction
+    // Software update
 }

@@ -11,9 +11,9 @@ import utils.Utils
 // Network availability can be checked before a message is to be sent and if a network is
 // available then it can be used to transmit the full message
 
-//enum class ComponentType {
+// enum class ComponentType {
 //    Fuel, Thruster, Instrument, ControlSystem, PowerPlant
-//}
+// }
 
 sealed class Component {
     // reports payload size in kilobytes
@@ -24,20 +24,20 @@ sealed class Component {
     // report rate in hours
     var reportRate = Utils.getRandomNumberInRange(0.30f, 24f * 7f)
 
-    //open lateinit var message: String
+    // open lateinit var message: String
     open fun showMessage() {}
 }
 
-data class Fuel(var quantity: Int = 1000): Component() {
+data class Fuel(var quantity: Int = 1000) : Component() {
     override fun showMessage() {
-        //println(this.message.capitalize())
+        // println(this.message.capitalize())
         super.showMessage()
     }
 }
 
 // TODO randomizer
 
-data class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int? = null, var isOn: Boolean = false): Component() {
+data class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int? = null, var isOn: Boolean = false) : Component() {
     override fun showMessage() {
         super.showMessage()
     }
@@ -48,13 +48,13 @@ class Instrument() : Component() {
     }
 }
 
-class ControlSystem(): Component() {
+class ControlSystem() : Component() {
     override fun showMessage() {
         super.showMessage()
     }
 }
 
-data class PowerPlant(val power: Int = 0, val remainingCapacity: Int = 8000, var damageLevel: Int = 0): Component() {
+data class PowerPlant(val power: Int = 0, val remainingCapacity: Int = 8000, var damageLevel: Int = 0) : Component() {
     override fun showMessage() {
         super.showMessage()
     }

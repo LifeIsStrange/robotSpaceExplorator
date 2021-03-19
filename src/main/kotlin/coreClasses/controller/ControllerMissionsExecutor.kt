@@ -1,8 +1,9 @@
 package coreClasses.controller
 
 import coreClasses.Component
-import coreClasses.mission.Mission
 import coreClasses.NetworkChannel
+import coreClasses.mission.Destination
+import coreClasses.mission.Mission
 import utils.Id
 import utils.Range
 import utils.Utils
@@ -19,8 +20,21 @@ import kotlin.reflect.full.createInstance
     represent the communications networks (queues) too
  */
 // The mission controller is a shared resource used for all missions.
+
+var possibleDestinationList = listOf<Destination>(
+    Destination("Moon", 0.384f),
+    Destination("Mars", 246f),
+    Destination("Venus", 257f),
+    Destination("Neptune", 4623f),
+    Destination("Mercure", 167f),
+    Destination("Sun", 149f),
+    Destination("Jupiter", 870f),
+    Destination("Saturn", 746f),
+    Destination("Uranus", 3069f),
+)
+
 class ControllerMissionsExecutor(private var numberOfSimultaneousMissions: Int, private var executor: ExecutorService) {
-    private var missionList :MutableList<Mission> = mutableListOf();
+    private var missionList: MutableList<Mission> = mutableListOf()
 
     private fun getRandomizedComponentList(): List<Component> {
         val componentList = mutableListOf<Component>()
@@ -36,9 +50,13 @@ class ControllerMissionsExecutor(private var numberOfSimultaneousMissions: Int, 
 
     private fun initMissions(createSharedNetworkChannel: (missionId: Id) -> NetworkChannel) {
         for (threadIdx in 0 until this.numberOfSimultaneousMissions) {
-            val missionId = Utils.generateUUID();
-            val mission = Mission(missionId, getRandomizedComponentList(), createSharedNetworkChannel(missionId))
-
+            val missionId = Utils.generateUUID()
+            val mission = Mission(
+                missionId,
+                getRandomizedComponentList(),
+                createSharedNetworkChannel(missionId),
+                possibleDestinationList[Utils.getRandomNumberInRange(0f, possibleDestinationList.lastIndex.toFloat()).toInt()]
+            )
             missionList.add(mission)
         }
     }
@@ -56,7 +74,7 @@ class ControllerMissionsExecutor(private var numberOfSimultaneousMissions: Int, 
     fun scheduleMissions(createSharedNetworkChannel: (missionId: Id) -> NetworkChannel) {
         // might benefit from a ScheduledExecutorService or a forkJoinPool
         // note that we currently execute as much tasks as the threadPool size so there is no reuse ?
-        //initMissions(numberOfSimultaneousMissions, createSharedNetwork)
+        // initMissions(numberOfSimultaneousMissions, createSharedNetwork)
         this.initMissions(createSharedNetworkChannel)
         this.executeMissions()
     }

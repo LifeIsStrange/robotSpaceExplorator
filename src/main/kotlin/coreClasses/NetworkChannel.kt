@@ -20,16 +20,23 @@ enum class EmitterType {
     Mission
 }
 
-enum class MessageType {
-    Boost,
-    Transit,
-    Landing,
-    Exploration
+// data (image etc) lourd pas fréquent
+// télémétrie (log) fréquent
+// software update
+// stage 1kb
+
+enum class MessageStageType {
+        Boost,
+        Transit,
+        Landing,
+        Exploration
 }
+
 class Message(
-    var content: String,
-    var emitterType: EmitterType,
-    var messageType: MessageType,
+    val content: String,
+    val emitterType: EmitterType,
+    val messageType: MessageStageType,
+    //var payloadSize: Int
 )
 
 class NetworkChannel(

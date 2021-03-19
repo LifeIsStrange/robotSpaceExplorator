@@ -2,12 +2,13 @@ package coreClasses.network
 
 import coreClasses.EmitterType
 import coreClasses.Message
-import coreClasses.MessageType
+import coreClasses.MessageStageType
 import coreClasses.NetworkChannel
 
-class NetworkMissionService(override var networkChannel: NetworkChannel) : Network {
+class NetworkServiceMissionService(override var networkChannel: NetworkChannel) : NetworkService() {
     fun receiveStageAnswer(): Message? {
-        var msg: Message? = null;
+        var msg: Message? = null
+
         while (true) {
             msg = this.networkChannel.messageQueue.firstOrNull()
 
@@ -24,7 +25,8 @@ class NetworkMissionService(override var networkChannel: NetworkChannel) : Netwo
         return this.receiveStageAnswer()
     }
 
-    public override fun sendMessage(receivedMessageType: MessageType?, messageContent: String, newMessageType: MessageType) {
+    public override fun sendMessage(receivedMessageType: MessageStageType?, messageContent: String, newMessageType: MessageStageType) {
+        this.setBestPossibleAvailableNetworkBandWidth()
         this.networkChannel.messageQueue.offer(
             Message(
                 content = messageContent,

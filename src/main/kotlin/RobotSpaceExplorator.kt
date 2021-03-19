@@ -3,8 +3,8 @@ import utils.Utils
 
 object RobotSpaceExplorator {
     fun createConfigFile() {
-        Utils.deleteFileIfExists(Utils.defaultLogFileName);
-        Utils.createNewFileIfNotExists(Utils.defaultLogFileName);
+        Utils.deleteFileIfExists(Utils.defaultLogFileName)
+        Utils.createNewFileIfNotExists(Utils.defaultLogFileName)
     }
 }
 

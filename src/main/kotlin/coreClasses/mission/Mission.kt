@@ -1,8 +1,7 @@
 package coreClasses.mission
 
 import coreClasses.*
-import coreClasses.network.Network
-import coreClasses.network.NetworkMissionService
+import coreClasses.network.NetworkServiceMissionService
 import utils.Id
 import utils.Utils
 
@@ -11,8 +10,15 @@ import utils.Utils
  */
 // todo get random destination and network
 // todo fix fuel mismatch
-class Mission(val id: Id, var componentList: List<Component>, private var networkChannel: NetworkChannel) : Runnable {
-    private var missionNetworkService = NetworkMissionService(networkChannel)
+class Destination(val name: String, val distance: Float)
+
+class Mission(
+      val id: Id,
+      var componentList: List<Component>,
+      private var networkChannel: NetworkChannel,
+      private var destination: Destination
+    ) : Runnable {
+    private var missionNetworkService = NetworkServiceMissionService(networkChannel)
 
     companion object {
         /** time is simulated by considering months as seconds  */
@@ -38,8 +44,8 @@ class Mission(val id: Id, var componentList: List<Component>, private var networ
 
     private fun boostStage() {
         println(Thread.currentThread().name + " entering boost stage..")
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating boost stage", newMessageType = MessageType.Boost )
-        //this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage", EmitterType.Mission, MessageType.Boost))
+        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating boost stage", newMessageType = MessageStageType.Boost)
+        // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage", EmitterType.Mission, MessageType.Boost))
         this.missionNetworkService.receiveStageAnswer()
     }
     // A variable burst of reports and
@@ -57,15 +63,15 @@ class Mission(val id: Id, var componentList: List<Component>, private var networ
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating transit stage", newMessageType = MessageType.Transit )
-        //this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Transit))
+        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating transit stage", newMessageType = MessageStageType.Transit)
+        // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Transit))
         this.missionNetworkService.receiveStageAnswer()
     }
 
     private fun landingStage() {
         println(Thread.currentThread().name + " entering landing stage..")
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating landing stage", newMessageType = MessageType.Landing )
-        //this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Landing))
+        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating landing stage", newMessageType = MessageStageType.Landing)
+        // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Landing))
         this.missionNetworkService.receiveStageAnswer()
     }
 
@@ -82,8 +88,7 @@ class Mission(val id: Id, var componentList: List<Component>, private var networ
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating exploration stage", newMessageType = MessageType.Exploration )
-        //this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Exploration))
+        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating exploration stage", newMessageType = MessageStageType.Exploration)
+        // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Exploration))
     }
-
 }

@@ -1,22 +1,20 @@
 package coreClasses.controller
 
 import coreClasses.EmitterType
-import coreClasses.Message
-import coreClasses.MessageType
 import coreClasses.NetworkChannel
-import coreClasses.network.Network
-import coreClasses.network.NetworkControllerService
+import coreClasses.network.NetworkServiceControllerService
 import utils.next
 import java.util.concurrent.ExecutorService
 
 class ControllerNetworkMissionScheduller(
     private var networkChannel: NetworkChannel,
-    private var missionsExecutor: ExecutorService): Runnable {
+    private var missionsExecutor: ExecutorService
+) : Runnable {
 
-    val controllerNetworkService = NetworkControllerService(networkChannel)
+    val controllerNetworkService = NetworkServiceControllerService(networkChannel)
 
     override fun run() {
-        while(!this.missionsExecutor.isTerminated) {
+        while (!this.missionsExecutor.isTerminated) {
             val msg = this.controllerNetworkService.listenIncommingMessage()
 
             if (msg?.emitterType == EmitterType.Mission) {
