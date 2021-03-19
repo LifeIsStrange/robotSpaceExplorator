@@ -30,10 +30,12 @@ enum class MessageType {
     Telemetry,
     SoftwareUpdate,
     BoostStage,
+    InterTransit,
     TransitStage,
     LandingStage,
     ExplorationStage,
-    Failure
+    Failure,
+    SucessfullSoftwareUpdate
 }
 
 
@@ -41,7 +43,7 @@ class Message(
     val content: String,
     val emitterType: EmitterType,
     val messageType: MessageType,
-    var payloadSize: Float
+    var payloadSize: Float //kb
 )
 
 class NetworkChannel(

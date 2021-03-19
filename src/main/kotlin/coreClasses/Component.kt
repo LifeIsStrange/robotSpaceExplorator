@@ -31,37 +31,60 @@ sealed class Component() {
     var reportRate = Utils.getRandomNumberInRange(0.30f, 24f * 7f)
 
     // open lateinit var message: String
-    open fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {}
+    open suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {}
+
+    fun degradeComponentProperty(value: Int): Int {
+        val newVal = value / Utils.getRandomNumberInRange(4f, 9f).toInt();
+        return value - newVal
+    }
+    open fun degradeComponent() {}
 }
 
 class Fuel(var quantity: Int = 1000) : Component() {
-    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+    override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
         networkServiceMissionService.sendMessage(messageContent = "quantity fuel remaining in the tank \"$id\" is : $quantity", newMessageType = MessageType.Telemetry)
     }
+
+    override fun degradeComponent() {
+        this.quantity -= this.degradeComponentProperty(this.quantity)
+    }
+
 }
 
 // TODO randomizer
 
-class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int? = null, var isOn: Boolean = false
+class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int = 1000, var isOn: Boolean = false
 ) : Component() {
-    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "power current level $power of the thruster: \"$id\"", newMessageType = MessageType.Telemetry)
+    override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+        networkServiceMissionService.sendMessage(messageContent = "Thruster \"$id\": power current level $power, damage level: $damageLevel, heat level: $heatLevel degre celsus", newMessageType = MessageType.Telemetry)
+    }
+
+    override fun degradeComponent() {
+        this.power -= this.degradeComponentProperty(this.power)
+        this.damageLevel += Utils.getRandomNumberInRange(30f, 132f).toInt()
+        this.heatLevel += Utils.getRandomNumberInRange(-132f, 132f).toInt()
     }
 }
 class Instrument() : Component() {
-    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+    override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
         networkServiceMissionService.sendMessage(messageContent = "Instrument \"$id\" is ok !", newMessageType = MessageType.Telemetry)
     }
 }
 
 class ControlSystem() : Component() {
-    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+    override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
         networkServiceMissionService.sendMessage(messageContent = "The ControlSystem \"$id\" has no problem to report!", newMessageType = MessageType.Telemetry)
     }
 }
 
-class PowerPlant(val power: Int = 0, val remainingCapacity: Int = 8000, var damageLevel: Int = 0) : Component() {
-    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+class PowerPlant(var power: Int = 0, var remainingCapacity: Int = 8000, var damageLevel: Int = 0) : Component() {
+    override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
         networkServiceMissionService.sendMessage(messageContent = "PowerPlant \"$id\" informations: Power : $power, remaining capacity: $remainingCapacity and damageLevel: $damageLevel", newMessageType = MessageType.Data)
+    }
+
+    override fun degradeComponent() {
+        this.power -= this.degradeComponentProperty(this.power)
+        this.remainingCapacity -= this.degradeComponentProperty(this.remainingCapacity)
+        this.damageLevel -= this.degradeComponentProperty(this.damageLevel)
     }
 }

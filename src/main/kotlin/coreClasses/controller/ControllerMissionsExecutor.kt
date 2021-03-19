@@ -73,9 +73,9 @@ class ControllerMissionsExecutor(private var numberOfSimultaneousMissions: Int, 
         // busy wait ?
         while (!executor.isTerminated) {}
 
-        //if (this.exeptionMissionFailedList.reduce {}
-
-        println("All the missions have been completed!")
+        if (!this.exeptionMissionFailedList.any { it.get() is java.lang.Exception }) {
+            println("All the missions have been completed!")
+        }
         this.exeptionMissionFailedList.forEach {
             val exeption = it.get()
             if (exeption != null) {

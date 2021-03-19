@@ -7,6 +7,9 @@ import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
 typealias Id = String
+typealias MilliSeconds = Float
+typealias KBs = Float
+
 
 object Utils {
     var defaultLogFileName = "output.dat"
@@ -50,6 +53,14 @@ object Utils {
 
     fun generateUUID(): String {
         return java.util.UUID.randomUUID().toString().takeLast(4)
+    }
+
+    fun sleep(time: MilliSeconds) {
+        try {
+            Thread.sleep(time.toLong())
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     }
 }
 inline fun <reified T : Enum<T>> T.next(): T {

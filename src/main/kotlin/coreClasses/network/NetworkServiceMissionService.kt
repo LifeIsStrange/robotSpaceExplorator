@@ -1,5 +1,7 @@
 package coreClasses.network
 
+import utils.Utils
+
 //TODO
 class NetworkServiceMissionService(override var networkChannel: NetworkChannel) : NetworkService() {
     fun receiveStageAnswer(): Message? {
@@ -9,8 +11,7 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
             msg = this.networkChannel.messageQueue.firstOrNull()
 
             if (msg?.emitterType == EmitterType.Controller) {
-                //TODO remplacer par log
-                println(msg.content)
+                Utils.log(msg.content)
                 this.networkChannel.messageQueue.poll()
                 return msg
             }
@@ -22,9 +23,12 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
         return this.receiveStageAnswer()
     }
 
-    public override fun sendMessage(receivedMessageType: MessageType?, messageContent: String, newMessageType: MessageType) {
+    public override suspend fun sendMessage(receivedMessageType: MessageType?, messageContent: String, newMessageType: MessageType) {
         this.setBestPossibleAvailableNetworkBandWidth()
         val sizeMessage = this.getPayloadSizeForMessageType(newMessageType)
+
+        //FIXME : remove comments
+        //this.simulateTimeToTransferMessage(sizeMessage)
         this.networkChannel.messageQueue.offer(
             Message(
                 this.addHeaderToMessageContent(messageContent, sizeMessage, networkChannel.missionId, newMessageType),

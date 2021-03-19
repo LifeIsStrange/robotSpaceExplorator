@@ -4,6 +4,8 @@ import coreClasses.*
 import coreClasses.network.MessageType
 import coreClasses.network.NetworkChannel
 import coreClasses.network.NetworkServiceMissionService
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import utils.Id
 import utils.Utils
 import java.util.concurrent.atomic.AtomicReference
@@ -16,10 +18,10 @@ import java.util.concurrent.atomic.AtomicReference
 class Destination(val name: String, val distance: Float)
 
 //TODO change thread name by ID
-//TODO receptioner la software update, si fail stopper mission
 //TODO log dans output
 //TODO change mission à 10
 //TODO changer gérer le temps
+
 class Mission(
     val id: Id,
     var componentList: List<Component>,
@@ -28,6 +30,7 @@ class Mission(
     private var possibleFailureException: AtomicReference<Exception?>
     ) : Runnable {
     private var missionNetworkService = NetworkServiceMissionService(networkChannel)
+    var currentDistanceFromController = 0f
 
     companion object {
         /** time is simulated by considering months as seconds  */
@@ -46,36 +49,61 @@ class Mission(
         } catch (e: Exception) {
             System.err.println("je catch l'erreur et je la fou dans l'attmic")
             this.possibleFailureException.set(e)
-        }}
+        }
+    }
 
     private fun sendMessageIfFailure() {
         if (Utils.getRandomNumberInRange(0f, 100f) <= 10f) {
-            this.missionNetworkService.sendMessage(messageContent = "stage transition failed of mission $missionId", newMessageType = MessageType.Failure)
+            GlobalScope.launch {
+                missionNetworkService.sendMessage(
+                    messageContent = "stage transition failed of mission $missionId",
+                    newMessageType = MessageType.Failure
+                )
+            }
             var msg = this.missionNetworkService.listenIncommingMessage()
             if (Utils.getRandomNumberInRange(0f, 100f) > 25f) {
                 println("abort mission, update fail")
                 throw Exception("Mission $missionId abort, update non successfull")
             } else {
+                GlobalScope.launch {
+                    missionNetworkService.sendMessage(
+                        messageContent = "Mission $missionId has sucessfully recovered from the software update",
+                        newMessageType = MessageType.SucessfullSoftwareUpdate
+                    )
+                }
                 //todo dire success
+            }
+        }
+    }
+
+    private fun degradeAndSendComponentsMessages() {
+        this.componentList.forEach {
+            GlobalScope.launch {
+                it.degradeComponent()
+                it.sendMessage(missionNetworkService)
             }
         }
     }
     private fun scheduleStages() {
         this.boostStage()
-        this.componentList.forEach { it.sendMessage(this.missionNetworkService) }
+        this.degradeAndSendComponentsMessages()
         this.sendMessageIfFailure()
         this.transitStage()
-        this.componentList.forEach { it.sendMessage(this.missionNetworkService) }
         this.sendMessageIfFailure()
         this.landingStage()
-        this.componentList.forEach { it.sendMessage(this.missionNetworkService) }
+        this.degradeAndSendComponentsMessages()
         this.sendMessageIfFailure()
         this.explorationStage()
     }
 
     private fun boostStage() {
         println(Thread.currentThread().name + " entering boost stage..")
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating boost stage", newMessageType = MessageType.BoostStage)
+        GlobalScope.launch {
+           missionNetworkService.sendMessage(
+                messageContent = "${Thread.currentThread().name} terminating boost stage",
+                newMessageType = MessageType.BoostStage
+            )
+        }
         // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage", EmitterType.Mission, MessageType.Boost))
         this.missionNetworkService.listenIncommingMessage()
     }
@@ -84,24 +112,40 @@ class Mission(
     // There are a variable number of types
     // of commands and reports for each mission.
     private fun transitStage() {
+        val transitStepTime = Utils.getRandomNumberInRange(defaultMinStageTime, defaultMaxStageTime) / 4
         println(Thread.currentThread().name + " entering interplanetary transit stage..")
-        try {
-            // todo failure rate 10% min
-            Thread.sleep(
-                Utils.getRandomNumberInRange(defaultMinStageTime, defaultMaxStageTime)
-                    .toLong()
-            )
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
+        val destinationDistanceQuartile = destination.distance / 4f
+
+        GlobalScope.launch {
+            Utils.sleep(transitStepTime)
+            currentDistanceFromController += destinationDistanceQuartile
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 1 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit)
+            degradeAndSendComponentsMessages()
+            Utils.sleep(transitStepTime)
+            currentDistanceFromController += destinationDistanceQuartile
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 2 in progress, middle of the mission: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit)
+            degradeAndSendComponentsMessages()
+            Utils.sleep(transitStepTime)
+            currentDistanceFromController += destinationDistanceQuartile
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 3 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit)
+            degradeAndSendComponentsMessages()
+            Utils.sleep(transitStepTime)
+            currentDistanceFromController += destinationDistanceQuartile
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId transit stage ended: we are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached!", newMessageType = MessageType.TransitStage)
         }
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating transit stage", newMessageType = MessageType.TransitStage)
-        // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Transit))
         this.missionNetworkService.listenIncommingMessage()
     }
 
+
+
     private fun landingStage() {
         println(Thread.currentThread().name + " entering landing stage..")
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating landing stage", newMessageType = MessageType.LandingStage)
+        GlobalScope.launch {
+            missionNetworkService.sendMessage(
+                messageContent = "${Thread.currentThread().name} terminating landing stage",
+                newMessageType = MessageType.LandingStage
+            )
+        }
         // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Landing))
         this.missionNetworkService.listenIncommingMessage()
     }
@@ -119,7 +163,12 @@ class Mission(
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        this.missionNetworkService.sendMessage(messageContent = "${Thread.currentThread().name} terminating exploration stage", newMessageType = MessageType.ExplorationStage)
+        GlobalScope.launch {
+            missionNetworkService.sendMessage(
+                messageContent = "${Thread.currentThread().name} terminating exploration stage",
+                newMessageType = MessageType.ExplorationStage
+            )
+        }
         // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Exploration))
     }
 }
