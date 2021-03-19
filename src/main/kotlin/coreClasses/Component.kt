@@ -1,5 +1,7 @@
 package coreClasses
 
+import coreClasses.network.MessageType
+import coreClasses.network.NetworkServiceMissionService
 import utils.Utils
 
 /**
@@ -15,7 +17,7 @@ import utils.Utils
 //    Fuel, Thruster, Instrument, ControlSystem, PowerPlant
 // }
 
-sealed class Component {
+sealed class Component() {
     // reports payload size in kilobytes
     // Reports can be telemetry (100-10k bytes, frequent) or
     // data (100k-100MB, periodic)
@@ -25,37 +27,37 @@ sealed class Component {
     var reportRate = Utils.getRandomNumberInRange(0.30f, 24f * 7f)
 
     // open lateinit var message: String
-    open fun showMessage() {}
+    open fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {}
 }
 
-data class Fuel(var quantity: Int = 1000) : Component() {
-    override fun showMessage() {
-        // println(this.message.capitalize())
-        super.showMessage()
+class Fuel(var quantity: Int = 1000) : Component() {
+    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+        networkServiceMissionService.sendMessage(messageContent = "quantity fuel remaining $quantity", newMessageType = MessageType.Telemetry)
     }
 }
 
 // TODO randomizer
 
-data class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int? = null, var isOn: Boolean = false) : Component() {
-    override fun showMessage() {
-        super.showMessage()
+class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int? = null, var isOn: Boolean = false
+) : Component() {
+    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+        networkServiceMissionService.sendMessage(messageContent = "power current level $power", newMessageType = MessageType.Telemetry)
     }
 }
 class Instrument() : Component() {
-    override fun showMessage() {
-        super.showMessage()
+    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+        networkServiceMissionService.sendMessage(messageContent = "Instrument are ok !", newMessageType = MessageType.Telemetry)
     }
 }
 
 class ControlSystem() : Component() {
-    override fun showMessage() {
-        super.showMessage()
+    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+        networkServiceMissionService.sendMessage(messageContent = "No problem to repport !", newMessageType = MessageType.Telemetry)
     }
 }
 
-data class PowerPlant(val power: Int = 0, val remainingCapacity: Int = 8000, var damageLevel: Int = 0) : Component() {
-    override fun showMessage() {
-        super.showMessage()
+class PowerPlant(val power: Int = 0, val remainingCapacity: Int = 8000, var damageLevel: Int = 0) : Component() {
+    override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
+        networkServiceMissionService.sendMessage(messageContent = "Power : $power, remaining capacity: $remainingCapacity and damageLevel: $damageLevel", newMessageType = MessageType.Data)
     }
 }

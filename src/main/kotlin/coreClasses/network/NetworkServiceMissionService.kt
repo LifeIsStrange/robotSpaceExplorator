@@ -8,6 +8,7 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
             msg = this.networkChannel.messageQueue.firstOrNull()
 
             if (msg?.emitterType == EmitterType.Controller) {
+                //TODO remplacer par log
                 println(msg.content)
                 this.networkChannel.messageQueue.poll()
                 return msg
@@ -25,7 +26,7 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
         val sizeMessage = this.getPayloadSizeForMessageType(newMessageType)
         this.networkChannel.messageQueue.offer(
             Message(
-                this.addHeaderToMessageContent(messageContent, sizeMessage, networkChannel.missionId),
+                this.addHeaderToMessageContent(messageContent, sizeMessage, networkChannel.missionId, newMessageType),
                 EmitterType.Mission,
                 newMessageType,
                 sizeMessage

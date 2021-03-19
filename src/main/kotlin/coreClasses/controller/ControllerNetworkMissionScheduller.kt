@@ -17,13 +17,14 @@ class ControllerNetworkMissionScheduller(
         while (!this.missionsExecutor.isTerminated) {
             val msg = this.controllerNetworkService.listenIncommingMessage()
 
-            if (msg?.emitterType == EmitterType.Mission && msg.messageType.name.endsWith("Stage") ) {
-                println(msg.content)
-                this.controllerNetworkService.sendMessage(
-                    receivedMessageType = msg.messageType,
-                    messageContent = "end of stage: \"${msg.messageType}\" accepted, you can go on ${msg.messageType.next()}",
-                    newMessageType = msg.messageType.next()
-                )
+            if (msg?.emitterType == EmitterType.Mission) {
+                if (msg.messageType.name.endsWith("Stage") ) {
+                    this.controllerNetworkService.sendMessage(
+                        receivedMessageType = msg.messageType,
+                        messageContent = "end of stage: \"${msg.messageType}\" accepted, you can go on ${msg.messageType.next()}",
+                        newMessageType = msg.messageType.next()
+                    )
+                }
             }
         }
     }

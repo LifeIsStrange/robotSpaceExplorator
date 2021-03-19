@@ -17,8 +17,8 @@ abstract class NetworkService {
        this.setBestPossibleAvailableNetworkBandWidth()
     }
 
-    fun addHeaderToMessageContent(messageContent: String, sizeMessage: Float, missionId: Id): String {
-        return "message size: $sizeMessage, missionId: ${networkChannel.missionId}, $messageContent"
+    fun addHeaderToMessageContent(messageContent: String, sizeMessage: Float, missionId: Id, messageType: MessageType): String {
+        return "message size: $sizeMessage, messageType: $messageType, missionId: ${networkChannel.missionId}, $messageContent"
     }
 
     fun getPayloadSizeForMessageType(messageType: MessageType): Float {

@@ -39,8 +39,11 @@ class Mission(
 
     private fun scheduleStages() {
         this.boostStage()
+        this.componentList.forEach { it.sendMessage(this.missionNetworkService) }
         this.transitStage()
+        this.componentList.forEach { it.sendMessage(this.missionNetworkService) }
         this.landingStage()
+        this.componentList.forEach { it.sendMessage(this.missionNetworkService) }
         this.explorationStage()
     }
 
