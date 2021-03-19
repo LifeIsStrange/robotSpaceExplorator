@@ -1,5 +1,6 @@
 package coreClasses.network
 
+//TODO
 class NetworkServiceMissionService(override var networkChannel: NetworkChannel) : NetworkService() {
     fun receiveStageAnswer(): Message? {
         var msg: Message? = null

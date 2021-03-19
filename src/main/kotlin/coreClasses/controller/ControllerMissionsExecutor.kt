@@ -1,14 +1,16 @@
 package coreClasses.controller
 
 import coreClasses.Component
-import coreClasses.network.NetworkChannel
 import coreClasses.mission.Destination
 import coreClasses.mission.Mission
+import coreClasses.network.NetworkChannel
 import utils.Id
 import utils.Range
 import utils.Utils
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.full.createInstance
+
 
 /**
  * this class is responsible for the scheduling of the Missions
@@ -35,6 +37,7 @@ var possibleDestinationList = listOf<Destination>(
 
 class ControllerMissionsExecutor(private var numberOfSimultaneousMissions: Int, private var executor: ExecutorService) {
     private var missionList: MutableList<Mission> = mutableListOf()
+    val exeptionMissionFailedList = List<AtomicReference<Exception?>>(numberOfSimultaneousMissions) { AtomicReference(null)}
 
     private fun getRandomizedComponentList(): List<Component> {
         val componentList = mutableListOf<Component>()
@@ -55,20 +58,31 @@ class ControllerMissionsExecutor(private var numberOfSimultaneousMissions: Int, 
                 missionId,
                 getRandomizedComponentList(),
                 createSharedNetworkChannel(missionId),
-                possibleDestinationList[Utils.getRandomNumberInRange(0f, possibleDestinationList.lastIndex.toFloat()).toInt()]
+                possibleDestinationList[Utils.getRandomNumberInRange(0f, possibleDestinationList.lastIndex.toFloat()).toInt()],
+                this.exeptionMissionFailedList[threadIdx]
             )
             missionList.add(mission)
         }
     }
 
     private fun executeMissions() {
-        missionList.forEach { executor.execute(it) }
+            missionList.forEach { executor.execute(it) }
     }
 
     fun shutdownMissionsWhenTerminated() {
         // busy wait ?
         while (!executor.isTerminated) {}
+
+        if (this.exeptionMissionFailedList.reduce {}
+
         println("All the missions have been completed!")
+        this.exeptionMissionFailedList.forEach {
+            val exeption = it.get()
+            if (exeption != null) {
+               System.err.println("on catch yES sir: voici l'exption: ")
+               exeption.printStackTrace()
+            }
+        }
     }
 
     fun scheduleMissions(createSharedNetworkChannel: (missionId: Id) -> NetworkChannel) {
