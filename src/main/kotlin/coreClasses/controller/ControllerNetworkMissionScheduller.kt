@@ -1,6 +1,7 @@
 package coreClasses.controller
 
 import coreClasses.network.EmitterType
+import coreClasses.network.MessageType
 import coreClasses.network.NetworkChannel
 import coreClasses.network.NetworkServiceControllerService
 import utils.next
@@ -23,6 +24,12 @@ class ControllerNetworkMissionScheduller(
                         receivedMessageType = msg.messageType,
                         messageContent = "end of stage: \"${msg.messageType}\" accepted, you can go on ${msg.messageType.next()}",
                         newMessageType = msg.messageType.next()
+                    )
+                }
+                else if (msg.messageType == MessageType.Failure) {
+                    this.controllerNetworkService.sendMessage(
+                        messageContent = "send the code to fix the bug caused by the failure in mission \"${networkChannel.missionId}\"",
+                        newMessageType = MessageType.SoftwareUpdate
                     )
                 }
             }

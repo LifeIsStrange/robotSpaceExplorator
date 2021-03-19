@@ -32,7 +32,8 @@ enum class MessageType {
     BoostStage,
     TransitStage,
     LandingStage,
-    ExplorationStage
+    ExplorationStage,
+    Failure
 }
 
 

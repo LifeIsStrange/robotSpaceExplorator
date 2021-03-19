@@ -18,12 +18,12 @@ abstract class NetworkService {
     }
 
     fun addHeaderToMessageContent(messageContent: String, sizeMessage: Float, missionId: Id, messageType: MessageType): String {
-        return "message size: $sizeMessage, messageType: $messageType, missionId: ${networkChannel.missionId}, $messageContent"
+        return "message size: $sizeMessage, messageType: $messageType, missionId: \"${networkChannel.missionId}\", $messageContent"
     }
 
     fun getPayloadSizeForMessageType(messageType: MessageType): Float {
        return when {
-           messageType.name.endsWith("Stage") -> Utils.getRandomNumberInRange(0f, 1f)
+           messageType.name.endsWith("Stage") || messageType == MessageType.Failure -> Utils.getRandomNumberInRange(0f, 1f)
            messageType == MessageType.Telemetry -> Utils.getRandomNumberInRange(10f, 100f)
            messageType == MessageType.Data -> Utils.getRandomNumberInRange(100f, 100000f)
            messageType == MessageType.SoftwareUpdate -> Utils.getRandomNumberInRange(1000f, 10000f)

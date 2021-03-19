@@ -37,13 +37,21 @@ class Mission(
         scheduleStages()
     }
 
+    private fun sendMessageIfFailure() {
+        if (Utils.getRandomNumberInRange(0f, 100f) <= 50f) {
+            this.missionNetworkService.sendMessage(messageContent = "stage transition failed of mission $missionId", newMessageType = MessageType.Failure)
+        }
+    }
     private fun scheduleStages() {
         this.boostStage()
         this.componentList.forEach { it.sendMessage(this.missionNetworkService) }
+        this.sendMessageIfFailure()
         this.transitStage()
         this.componentList.forEach { it.sendMessage(this.missionNetworkService) }
+        this.sendMessageIfFailure()
         this.landingStage()
         this.componentList.forEach { it.sendMessage(this.missionNetworkService) }
+        this.sendMessageIfFailure()
         this.explorationStage()
     }
 

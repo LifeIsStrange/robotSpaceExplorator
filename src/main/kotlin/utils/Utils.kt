@@ -49,7 +49,7 @@ object Utils {
     }
 
     fun generateUUID(): String {
-        return java.util.UUID.randomUUID().toString()
+        return java.util.UUID.randomUUID().toString().takeLast(4)
     }
 }
 inline fun <reified T : Enum<T>> T.next(): T {

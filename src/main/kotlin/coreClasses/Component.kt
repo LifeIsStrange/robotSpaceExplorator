@@ -2,6 +2,7 @@ package coreClasses
 
 import coreClasses.network.MessageType
 import coreClasses.network.NetworkServiceMissionService
+import utils.Id
 import utils.Utils
 
 /**
@@ -21,6 +22,9 @@ sealed class Component() {
     // reports payload size in kilobytes
     // Reports can be telemetry (100-10k bytes, frequent) or
     // data (100k-100MB, periodic)
+
+    var id: Id = Utils.generateUUID()
+
     var payloadSize = Utils.getRandomNumberInRange(0.1f, 100000f)
 
     // report rate in hours
@@ -32,7 +36,7 @@ sealed class Component() {
 
 class Fuel(var quantity: Int = 1000) : Component() {
     override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "quantity fuel remaining $quantity", newMessageType = MessageType.Telemetry)
+        networkServiceMissionService.sendMessage(messageContent = "quantity fuel remaining in the tank \"$id\" is : $quantity", newMessageType = MessageType.Telemetry)
     }
 }
 
@@ -41,23 +45,23 @@ class Fuel(var quantity: Int = 1000) : Component() {
 class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int? = null, var isOn: Boolean = false
 ) : Component() {
     override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "power current level $power", newMessageType = MessageType.Telemetry)
+        networkServiceMissionService.sendMessage(messageContent = "power current level $power of the thruster: \"$id\"", newMessageType = MessageType.Telemetry)
     }
 }
 class Instrument() : Component() {
     override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "Instrument are ok !", newMessageType = MessageType.Telemetry)
+        networkServiceMissionService.sendMessage(messageContent = "Instrument \"$id\" is ok !", newMessageType = MessageType.Telemetry)
     }
 }
 
 class ControlSystem() : Component() {
     override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "No problem to repport !", newMessageType = MessageType.Telemetry)
+        networkServiceMissionService.sendMessage(messageContent = "The ControlSystem \"$id\" has no problem to report!", newMessageType = MessageType.Telemetry)
     }
 }
 
 class PowerPlant(val power: Int = 0, val remainingCapacity: Int = 8000, var damageLevel: Int = 0) : Component() {
     override fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "Power : $power, remaining capacity: $remainingCapacity and damageLevel: $damageLevel", newMessageType = MessageType.Data)
+        networkServiceMissionService.sendMessage(messageContent = "PowerPlant \"$id\" informations: Power : $power, remaining capacity: $remainingCapacity and damageLevel: $damageLevel", newMessageType = MessageType.Data)
     }
 }

@@ -45,7 +45,7 @@ class ControllerMissionsExecutor(private var numberOfSimultaneousMissions: Int, 
                 componentList.add(componentType.createInstance())
             }
         }
-        return componentList
+        return componentList.shuffled()
     }
 
     private fun initMissions(createSharedNetworkChannel: (missionId: Id) -> NetworkChannel) {
