@@ -25,12 +25,21 @@ enum class EmitterType {
 // software update
 // stage 1kb
 
-enum class MessageStageType {
+sealed interface MessageType
+    enum class MessageStageType : MessageType {
         Boost,
         Transit,
         Landing,
         Exploration
-}
+    }
+
+    class SoftwareUpdate : MessageType
+    class Telemetry : MessageType
+    class Data : MessageType
+
+
+
+
 
 class Message(
     val content: String,

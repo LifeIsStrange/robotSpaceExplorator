@@ -4,7 +4,7 @@ plugins {
     java
     // beware to not silently import kotlin stdlib code into java
     // kotlin("jvm") version "1.4.31"
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.4.31"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
 }
 
@@ -22,11 +22,11 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
 }
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "13"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "13"
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "1.8"
+        languageVersion = "1.5"
+    }
 }
