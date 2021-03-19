@@ -1,5 +1,8 @@
 package coreClasses.network
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import utils.Id
 import utils.KBs
 import utils.MilliSeconds
@@ -34,11 +37,13 @@ abstract class NetworkService {
     }
 
     fun simulateTimeToTransferMessage(sizeMessage: KBs, distanceFromEarthQuartile: Int) {
-       // try {
-       //     Thread.sleep(this.getTotalTimeForAMessageToTransmit(sizeMessage, distanceFromEarthQuartile).toLong() / 10)
-       // } catch (e: InterruptedException) {
-       //     e.printStackTrace()
-       // }
+        runBlocking {
+            var timeToDelay = getTotalTimeForAMessageToTransmit(sizeMessage, distanceFromEarthQuartile).toLong() / 10
+            if (timeToDelay > 5000) {
+                timeToDelay = 5000
+            }
+            Utils.delay(timeToDelay.toFloat())
+        }
    }
     fun setBestPossibleAvailableNetworkBandWidth() {
         if (Utils.getRandomNumberInRange(0f, 100f) <= 80f) {

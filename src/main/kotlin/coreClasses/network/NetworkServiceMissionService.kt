@@ -34,6 +34,7 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
         val sizeMessage = this.getPayloadSizeForMessageType(newMessageType)
 
         //FIXME : remove comments
+
         this.simulateTimeToTransferMessage(sizeMessage, distanceFromEarthQuintile)
         this.networkChannel.messageQueue.offer(
             Message(
