@@ -38,12 +38,12 @@ class Mission(
         var defaultMaxStageTime = 5000f
     }
     var startTime = Utils.getRandomNumberInRange(100f, 3000f)
-    var missionId = Thread.currentThread().id
+    lateinit var missionId: String
 
     override fun run() {
         try {
+            this.missionId = Thread.currentThread().name
             println(Thread.currentThread().name + " Mission starting.")
-            println(Thread.currentThread().name + " Mission constructed.")
             println("---------")
             scheduleStages()
         } catch (e: Exception) {

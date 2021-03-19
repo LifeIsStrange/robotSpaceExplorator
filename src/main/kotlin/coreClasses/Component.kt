@@ -42,7 +42,7 @@ sealed class Component() {
 
 class Fuel(var quantity: Int = 1000) : Component() {
     override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "quantity fuel remaining in the tank \"$id\" is : $quantity", newMessageType = MessageType.Telemetry)
+        networkServiceMissionService.sendMessage(messageContent = "Component Fuel \"$id\": quantity remaining in the tank is : $quantity", newMessageType = MessageType.Telemetry)
     }
 
     override fun degradeComponent() {
@@ -56,7 +56,7 @@ class Fuel(var quantity: Int = 1000) : Component() {
 class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int = 1000, var isOn: Boolean = false
 ) : Component() {
     override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "Thruster \"$id\": power current level $power, damage level: $damageLevel, heat level: $heatLevel degre celsus", newMessageType = MessageType.Telemetry)
+        networkServiceMissionService.sendMessage(messageContent = "Component Thruster \"$id\": power current level $power, damage level: $damageLevel, heat level: $heatLevel degre celsus", newMessageType = MessageType.Telemetry)
     }
 
     override fun degradeComponent() {
@@ -67,19 +67,19 @@ class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int 
 }
 class Instrument() : Component() {
     override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "Instrument \"$id\" is ok !", newMessageType = MessageType.Telemetry)
+        networkServiceMissionService.sendMessage(messageContent = "Component Instrument \"$id\": is ok !", newMessageType = MessageType.Telemetry)
     }
 }
 
 class ControlSystem() : Component() {
     override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "The ControlSystem \"$id\" has no problem to report!", newMessageType = MessageType.Telemetry)
+        networkServiceMissionService.sendMessage(messageContent = "Component ControlSystem \"$id\": has no problem to report!", newMessageType = MessageType.Telemetry)
     }
 }
 
 class PowerPlant(var power: Int = 0, var remainingCapacity: Int = 8000, var damageLevel: Int = 0) : Component() {
     override suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService) {
-        networkServiceMissionService.sendMessage(messageContent = "PowerPlant \"$id\" informations: Power : $power, remaining capacity: $remainingCapacity and damageLevel: $damageLevel", newMessageType = MessageType.Data)
+        networkServiceMissionService.sendMessage(messageContent = "Component PowerPlant \"$id\" informations: Power : $power, remaining capacity: $remainingCapacity and damageLevel: $damageLevel", newMessageType = MessageType.Data)
     }
 
     override fun degradeComponent() {
