@@ -73,7 +73,7 @@ class ControllerMissionsExecutor(private var numberOfSimultaneousMissions: Int, 
         // busy wait ?
         while (!executor.isTerminated) {}
 
-        if (this.exeptionMissionFailedList.reduce {}
+        //if (this.exeptionMissionFailedList.reduce {}
 
         println("All the missions have been completed!")
         this.exeptionMissionFailedList.forEach {
