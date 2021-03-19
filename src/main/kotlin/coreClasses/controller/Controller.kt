@@ -1,33 +1,37 @@
 package coreClasses.controller
 
 import coreClasses.Network
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import utils.Id
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class Controller() {
     private var networkMissionList = mutableListOf<Network>()
     private var numberOfSimultaneousMissions = 2
+    private var missionsExecutor: ExecutorService = Executors.newFixedThreadPool(this.numberOfSimultaneousMissions)
+    private var controllerNetworkMissionSchedullerExecutor = Executors.newFixedThreadPool(this.numberOfSimultaneousMissions)
+    private var missionScheduller: MissionScheduller = MissionScheduller(this.numberOfSimultaneousMissions, missionsExecutor)
 
     init {
-        MissionScheduller.initMissions(this.numberOfSimultaneousMissions, this::createSharedNetwork)
-        GlobalScope.launch {
-           executeConcurrentNetworkMissionSchedulers()
-        }
-        MissionScheduller.scheduleMissions(this.numberOfSimultaneousMissions, this::createSharedNetwork)
+        this.missionScheduller.scheduleMissions(this::createSharedNetwork)
+        missionsExecutor.shutdown()
+        this.executeConcurrentNetworkMissionSchedulers()
+        this.shutdownAllThreadServicesWhenTerminated()
     }
 
-    fun chichon() {
-
+    private fun shutdownAllThreadServicesWhenTerminated() {
+        this.missionScheduller.shutdownMissionsWhenTerminated()
+        this.shutdownNetworkMissionSchedulersWhenTerminated()
     }
-    private suspend fun executeConcurrentNetworkMissionSchedulers() {
-        val networkSchedullers = this.networkMissionList.map { ControllerNetworkMissionScheduller(it) }
-        val executor = Executors.newFixedThreadPool(numberOfSimultaneousMissions)
-        networkSchedullers.forEach { executor.execute(it) }
-        executor.shutdown()
-        while (!executor.isTerminated) {}
+
+    private fun shutdownNetworkMissionSchedulersWhenTerminated() {
+        this.controllerNetworkMissionSchedullerExecutor.shutdown()
+        while (!this.controllerNetworkMissionSchedullerExecutor.isTerminated) {}
+    }
+
+    private fun executeConcurrentNetworkMissionSchedulers() {
+        val networkSchedullers = this.networkMissionList.map { ControllerNetworkMissionScheduller(it, missionsExecutor) }
+        networkSchedullers.forEach { this.controllerNetworkMissionSchedullerExecutor.execute(it) }
     }
 
     private fun createSharedNetwork(missionId: Id): Network {

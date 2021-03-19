@@ -26,15 +26,26 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
 
     private fun scheduleStages() {
         this.boostStage()
-        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage"))
         this.transitStage()
-        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage"))
         this.landingStage()
         this.explorationStage()
     }
 
+    private fun receiveStageAnswer() {
+        while (true) {
+            var msg = this.network.messageQueue.firstOrNull()
+
+            if (msg?.emitterType == EmitterType.Controller) {
+                println(msg.content)
+                this.network.messageQueue.poll()
+                return
+            }
+        }
+    }
     private fun boostStage() {
         println(Thread.currentThread().name + " entering boost stage..")
+        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage", EmitterType.Mission, MessageType.Boost))
+        this.receiveStageAnswer()
     }
     // A variable burst of reports and
     // commands are sent at the transition between mission stages.
@@ -51,10 +62,14 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
+        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Transit))
+        this.receiveStageAnswer()
     }
 
     private fun landingStage() {
         println(Thread.currentThread().name + " entering landing stage..")
+        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Landing))
+        this.receiveStageAnswer()
     }
 
     // Time can simulated by allowing a fixed ratio of wall clock time to mission time eg 1 sec : 1
@@ -70,5 +85,6 @@ class Mission(val id: Id, var componentList: List<Component>, var network: Netwo
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
+        this.network.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Exploration))
     }
 }

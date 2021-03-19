@@ -1,7 +1,6 @@
 package coreClasses
 
 import utils.Id
-import java.util.*
 import java.util.concurrent.*
 
 /**
@@ -16,9 +15,21 @@ import java.util.concurrent.*
 // The communication networks for a mission are a shared resource used by all mission
 // components, but each mission has its own network.
 
+enum class EmitterType {
+    Controller,
+    Mission
+}
+
+enum class MessageType {
+    Boost,
+    Transit,
+    Landing,
+    Exploration
+}
 class Message(
     var content: String,
-    var response: String? = null
+    var emitterType: EmitterType,
+    var messageType: MessageType,
 )
 
 class Network(

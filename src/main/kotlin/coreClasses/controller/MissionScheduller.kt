@@ -20,7 +20,7 @@ import kotlin.reflect.full.createInstance
     represent the communications networks (queues) too
  */
 // The mission controller is a shared resource used for all missions.
-object MissionScheduller {
+class MissionScheduller(private var numberOfSimultaneousMissions: Int, private var executor: ExecutorService) {
     private var missionList :MutableList<Runnable> = mutableListOf();
 
     private fun getRandomizedComponentList(): List<Component> {
@@ -35,8 +35,8 @@ object MissionScheduller {
         return componentList
     }
 
-    fun initMissions(numberOfSimultaneousMissions: Int,   createSharedNetwork: (missionId: Id) -> Network) {
-        for (threadIdx in 0 until numberOfSimultaneousMissions) {
+    private fun initMissions(createSharedNetwork: (missionId: Id) -> Network) {
+        for (threadIdx in 0 until this.numberOfSimultaneousMissions) {
             val missionId = Utils.generateUUID();
             val mission = Mission(missionId, getRandomizedComponentList(), createSharedNetwork(missionId))
 
@@ -44,18 +44,21 @@ object MissionScheduller {
         }
     }
 
-    private fun executeMissions(executor: ExecutorService) {
+    private fun executeMissions() {
         missionList.forEach { executor.execute(it) }
     }
-    fun scheduleMissions(numberOfSimultaneousMissions: Int,  createSharedNetwork: (missionId: Id) -> Network) {
-        // might benefit from a ScheduledExecutorService or a forkJoinPool
-        // note that we currently execute as much tasks as the threadPool size so there is no reuse ?
-        //initMissions(numberOfSimultaneousMissions, createSharedNetwork)
-        val executor = Executors.newFixedThreadPool(numberOfSimultaneousMissions)
-        executeMissions(executor)
-        executor.shutdown()
+
+    fun shutdownMissionsWhenTerminated() {
         // busy wait ?
         while (!executor.isTerminated) {}
         println("All the missions have been completed!")
+    }
+
+    fun scheduleMissions(createSharedNetwork: (missionId: Id) -> Network) {
+        // might benefit from a ScheduledExecutorService or a forkJoinPool
+        // note that we currently execute as much tasks as the threadPool size so there is no reuse ?
+        //initMissions(numberOfSimultaneousMissions, createSharedNetwork)
+        this.initMissions(createSharedNetwork)
+        this.executeMissions()
     }
 }
