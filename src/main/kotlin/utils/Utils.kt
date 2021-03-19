@@ -11,6 +11,16 @@ typealias Id = String
 typealias MilliSeconds = Float
 typealias KBs = Float
 
+public const val ANSI_RESET = "\u001B[0m"
+public const val ANSI_BLACK = "\u001B[30m"
+public const val ANSI_RED = "\u001B[31m"
+public const val ANSI_GREEN = "\u001B[32m"
+public const val ANSI_YELLOW = "\u001B[33m"
+public const val ANSI_BLUE = "\u001B[34m"
+public const val ANSI_PURPLE = "\u001B[35m"
+public const val ANSI_CYAN = "\u001B[36m"
+public const val ANSI_WHITE = "\u001B[37m"
+
 
 object Utils {
     var defaultLogFileName = "output.dat"
