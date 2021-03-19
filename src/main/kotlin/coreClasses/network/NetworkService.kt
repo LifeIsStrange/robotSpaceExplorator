@@ -34,11 +34,11 @@ abstract class NetworkService {
     }
 
     fun simulateTimeToTransferMessage(sizeMessage: KBs, distanceFromEarthQuartile: Int) {
-        try {
-            Thread.sleep(this.getTotalTimeForAMessageToTransmit(sizeMessage, distanceFromEarthQuartile).toLong())
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
+       // try {
+       //     Thread.sleep(this.getTotalTimeForAMessageToTransmit(sizeMessage, distanceFromEarthQuartile).toLong() / 10)
+       // } catch (e: InterruptedException) {
+       //     e.printStackTrace()
+       // }
    }
     fun setBestPossibleAvailableNetworkBandWidth() {
         if (Utils.getRandomNumberInRange(0f, 100f) <= 80f) {

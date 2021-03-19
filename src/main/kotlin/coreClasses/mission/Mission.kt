@@ -77,22 +77,22 @@ class Mission(
         }
     }
 
-    private fun degradeAndSendComponentsMessages() {
+    private fun degradeAndSendComponentsMessages(currentStage: String?) {
         this.componentList.forEach {
             GlobalScope.launch {
                 it.degradeComponent()
-                it.sendMessage(missionNetworkService)
+                it.sendMessage(missionNetworkService, currentStage)
             }
         }
     }
     private fun scheduleStages() {
         this.boostStage()
-        this.degradeAndSendComponentsMessages()
+        this.degradeAndSendComponentsMessages("after boost stage")
         this.sendMessageIfFailure()
         this.transitStage()
         this.sendMessageIfFailure()
         this.landingStage()
-        this.degradeAndSendComponentsMessages()
+        this.degradeAndSendComponentsMessages("after landing")
         this.sendMessageIfFailure()
         this.explorationStage()
     }
@@ -121,15 +121,15 @@ class Mission(
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 1 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 2)
-            degradeAndSendComponentsMessages()
+            degradeAndSendComponentsMessages("inter transit stage 1")
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 2 in progress, middle of the mission: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 3)
-            degradeAndSendComponentsMessages()
+            degradeAndSendComponentsMessages("inter transit stage 2")
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 3 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit,  distanceFromEarthQuintile = 4)
-            degradeAndSendComponentsMessages()
+            degradeAndSendComponentsMessages("inter transit stage 3")
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             missionNetworkService.sendMessage(messageContent = "Mission: $missionId transit stage ended: we are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached!", newMessageType = MessageType.TransitStage, distanceFromEarthQuintile = 5)
