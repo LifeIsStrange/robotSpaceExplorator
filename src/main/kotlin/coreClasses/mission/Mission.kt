@@ -16,10 +16,10 @@ import java.util.concurrent.atomic.AtomicReference
 class Destination(val name: String, val distance: Float)
 
 //TODO change thread name by ID
-//TODO receptioner la software update, si fail stopper mission
 //TODO log dans output
 //TODO change mission à 10
 //TODO changer gérer le temps
+
 class Mission(
     val id: Id,
     var componentList: List<Component>,
@@ -56,6 +56,7 @@ class Mission(
                 println("abort mission, update fail")
                 throw Exception("Mission $missionId abort, update non successfull")
             } else {
+                this.missionNetworkService.sendMessage(messageContent = "Mission $missionId has sucessfully recovered from the software update", newMessageType = MessageType.SucessfullSoftwareUpdate)
                 //todo dire success
             }
         }

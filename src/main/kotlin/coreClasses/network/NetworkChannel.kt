@@ -33,7 +33,8 @@ enum class MessageType {
     TransitStage,
     LandingStage,
     ExplorationStage,
-    Failure
+    Failure,
+    SucessfullSoftwareUpdate
 }
 
 

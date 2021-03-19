@@ -27,6 +27,8 @@ abstract class NetworkService {
            messageType == MessageType.Telemetry -> Utils.getRandomNumberInRange(10f, 100f)
            messageType == MessageType.Data -> Utils.getRandomNumberInRange(100f, 100000f)
            messageType == MessageType.SoftwareUpdate -> Utils.getRandomNumberInRange(1000f, 10000f)
+           messageType == MessageType.SucessfullSoftwareUpdate -> Utils.getRandomNumberInRange(0f, 1f)
+
            else -> throw Exception("Unreachable")
        }
     }

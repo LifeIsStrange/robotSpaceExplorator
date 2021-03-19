@@ -1,5 +1,7 @@
 package coreClasses.network
 
+import utils.Utils
+
 //TODO
 class NetworkServiceMissionService(override var networkChannel: NetworkChannel) : NetworkService() {
     fun receiveStageAnswer(): Message? {
@@ -9,8 +11,7 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
             msg = this.networkChannel.messageQueue.firstOrNull()
 
             if (msg?.emitterType == EmitterType.Controller) {
-                //TODO remplacer par log
-                println(msg.content)
+                Utils.log(msg.content)
                 this.networkChannel.messageQueue.poll()
                 return msg
             }

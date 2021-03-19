@@ -1,13 +1,14 @@
 package coreClasses.network
 
+import utils.Utils
+
 class NetworkServiceControllerService(override var networkChannel: NetworkChannel) : NetworkService() {
 
     public override fun listenIncommingMessage(): Message? {
         var msg: Message? = networkChannel.messageQueue.firstOrNull()
 
         if (msg?.emitterType == EmitterType.Mission) {
-            //TODO log in file
-            println(msg.content)
+            Utils.log(msg.content)
             networkChannel.messageQueue.poll()
         }
         return msg

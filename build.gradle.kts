@@ -4,7 +4,7 @@ plugins {
     java
     // beware to not silently import kotlin stdlib code into java
     // kotlin("jvm") version "1.4.31"
-    kotlin("jvm") version "1.4.31"
+    kotlin("jvm") version "1.4.21"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
 }
 
@@ -27,6 +27,5 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
-        languageVersion = "1.5"
     }
 }
