@@ -14,14 +14,18 @@ class NetworkServiceControllerService(override var networkChannel: NetworkChanne
         return msg
     }
 
-    // sendMessageAuthorizationNextStage
-    public override suspend fun sendMessage(receivedMessageType: MessageType?, messageContent: String, newMessageType: MessageType) {
+    public override suspend fun sendMessage(
+        receivedMessageType: MessageType?,
+        messageContent: String,
+        newMessageType: MessageType,
+        distanceFromEarthQuintile: Int
+    ) {
         this.setBestPossibleAvailableNetworkBandWidth()
         if (receivedMessageType != MessageType.ExplorationStage) {
             val sizeMessage = this.getPayloadSizeForMessageType(newMessageType)
 
             //FIXME : remove comments
-            //this.simulateTimeToTransferMessage(sizeMessage)
+            this.simulateTimeToTransferMessage(sizeMessage, distanceFromEarthQuintile)
             this.networkChannel.messageQueue.add(
                 Message(
                     this.addHeaderToMessageContent(messageContent, sizeMessage, networkChannel.missionId, newMessageType),

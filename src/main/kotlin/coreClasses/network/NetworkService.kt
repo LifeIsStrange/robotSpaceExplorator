@@ -20,7 +20,7 @@ abstract class NetworkService {
     }
 
     fun addHeaderToMessageContent(messageContent: String, sizeMessage: Float, missionId: Id, messageType: MessageType): String {
-        return "message size: $sizeMessage, messageType: $messageType, missionId: \"${networkChannel.missionId}\", $messageContent"
+        return "message size: ${sizeMessage}KBs, messageType: $messageType, missionId: \"${networkChannel.missionId}\", $messageContent"
     }
 
     fun getPayloadSizeForMessageType(messageType: MessageType): KBs {
@@ -33,9 +33,9 @@ abstract class NetworkService {
        }
     }
 
-    fun simulateTimeToTransferMessage(sizeMessage: KBs) {
+    fun simulateTimeToTransferMessage(sizeMessage: KBs, distanceFromEarthQuartile: Int) {
         try {
-            Thread.sleep(this.getTotalTimeForAMessageToTransmit(sizeMessage).toLong())
+            Thread.sleep(this.getTotalTimeForAMessageToTransmit(sizeMessage, distanceFromEarthQuartile).toLong())
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
@@ -48,10 +48,10 @@ abstract class NetworkService {
         } else this.networkBandWidth = NetworkBandWidth.SLOW
     }
 
-    fun getTotalTimeForAMessageToTransmit(payloadSize: KBs): MilliSeconds {
-       return payloadSize / networkBandWidth.value * 1000
+    fun getTotalTimeForAMessageToTransmit(payloadSize: KBs, distanceFromEarthQuintile: Int): MilliSeconds {
+       return payloadSize / networkBandWidth.value * 1000 * distanceFromEarthQuintile
     }
 
     abstract fun listenIncommingMessage(): Message?
-    abstract suspend fun sendMessage(receivedMessageType: MessageType? = null, messageContent: String, newMessageType: MessageType)
+    abstract suspend fun sendMessage(receivedMessageType: MessageType? = null, messageContent: String, newMessageType: MessageType, distanceFromEarthQuintile: Int = 1)
 }

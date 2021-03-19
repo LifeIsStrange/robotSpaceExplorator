@@ -23,12 +23,17 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
         return this.receiveStageAnswer()
     }
 
-    public override suspend fun sendMessage(receivedMessageType: MessageType?, messageContent: String, newMessageType: MessageType) {
+    public override suspend fun sendMessage(
+        receivedMessageType: MessageType?,
+        messageContent: String,
+        newMessageType: MessageType,
+        distanceFromEarthQuintile: Int
+    ) {
         this.setBestPossibleAvailableNetworkBandWidth()
         val sizeMessage = this.getPayloadSizeForMessageType(newMessageType)
 
         //FIXME : remove comments
-        //this.simulateTimeToTransferMessage(sizeMessage)
+        this.simulateTimeToTransferMessage(sizeMessage, distanceFromEarthQuintile)
         this.networkChannel.messageQueue.offer(
             Message(
                 this.addHeaderToMessageContent(messageContent, sizeMessage, networkChannel.missionId, newMessageType),

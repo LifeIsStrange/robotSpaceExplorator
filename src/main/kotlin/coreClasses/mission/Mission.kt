@@ -119,34 +119,32 @@ class Mission(
         GlobalScope.launch {
             Utils.sleep(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 1 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit)
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 1 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 2)
             degradeAndSendComponentsMessages()
             Utils.sleep(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 2 in progress, middle of the mission: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit)
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 2 in progress, middle of the mission: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 3)
             degradeAndSendComponentsMessages()
             Utils.sleep(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 3 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit)
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId inter transit stage 3 in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit,  distanceFromEarthQuintile = 4)
             degradeAndSendComponentsMessages()
             Utils.sleep(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId transit stage ended: we are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached!", newMessageType = MessageType.TransitStage)
+            missionNetworkService.sendMessage(messageContent = "Mission: $missionId transit stage ended: we are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached!", newMessageType = MessageType.TransitStage, distanceFromEarthQuintile = 5)
         }
         this.missionNetworkService.listenIncommingMessage()
     }
-
-
 
     private fun landingStage() {
         println(Thread.currentThread().name + " entering landing stage..")
         GlobalScope.launch {
             missionNetworkService.sendMessage(
                 messageContent = "${Thread.currentThread().name} terminating landing stage",
-                newMessageType = MessageType.LandingStage
+                newMessageType = MessageType.LandingStage,
+                distanceFromEarthQuintile = 5
             )
         }
-        // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Landing))
         this.missionNetworkService.listenIncommingMessage()
     }
 
@@ -166,7 +164,8 @@ class Mission(
         GlobalScope.launch {
             missionNetworkService.sendMessage(
                 messageContent = "${Thread.currentThread().name} terminating exploration stage",
-                newMessageType = MessageType.ExplorationStage
+                newMessageType = MessageType.ExplorationStage,
+                distanceFromEarthQuintile = 5
             )
         }
         // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Exploration))
