@@ -1,16 +1,13 @@
 package coreClasses.mission
 
-import coreClasses.*
+import coreClasses.component.Component
 import coreClasses.network.MessageType
 import coreClasses.network.NetworkChannel
 import coreClasses.network.NetworkServiceMissionService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import utils.ANSI_RED
-import utils.ANSI_RESET
-import utils.Id
-import utils.Utils
+import utils.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -65,7 +62,9 @@ class Mission(
             }
             var msg = this.missionNetworkService.listenIncommingMessage()
             if (Utils.getRandomNumberInRange(0f, 100f) > 25f) {
-                println("abort mission, update fail")
+                runBlocking {
+                    missionNetworkService.sendMessage(messageContent = "abort mission, update fail", newMessageType = MessageType.AbortMission)
+                }
                 throw Exception("Mission $missionId abort, update non successfull")
             } else {
                 GlobalScope.launch {
@@ -91,16 +90,19 @@ class Mission(
         this.boostStage()
         this.degradeAndSendComponentsMessages("after boost stage")
         this.sendMessageIfFailure()
+
         this.transitStage()
         this.sendMessageIfFailure()
+
         this.landingStage()
         this.degradeAndSendComponentsMessages("after landing")
         this.sendMessageIfFailure()
+
         this.explorationStage()
     }
 
     private fun boostStage() {
-        println(Thread.currentThread().name + " entering boost stage..")
+        Utils.log(Thread.currentThread().name + " entering boost stage..")
         GlobalScope.launch {
            missionNetworkService.sendMessage(
                 messageContent = "${Thread.currentThread().name} terminating boost stage",
@@ -123,21 +125,21 @@ class Mission(
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             System.err.println("$id 1")
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId $ANSI_RED inter transit stage 1 $ANSI_RESET in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 2)
+            missionNetworkService.sendMessage(messageContent = "$ANSI_GREEN Mission: $missionId $ANSI_RESET $ANSI_RED inter transit stage 1 $ANSI_RESET $ANSI_GREEN in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name} $ANSI_RESET", newMessageType = MessageType.InterTransitStage, distanceFromEarthQuintile = 2)
             degradeAndSendComponentsMessages("inter transit stage 1")
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             System.err.println("$id 2")
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId $ANSI_RED inter transit stage 2 $ANSI_RESET in progress, middle of the mission: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit, distanceFromEarthQuintile = 3)
+            missionNetworkService.sendMessage(messageContent = "$ANSI_GREEN Mission: $missionId $ANSI_RESET $ANSI_RED inter transit stage 2 $ANSI_RESET $ANSI_GREEN in progress, middle of the mission: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name} $ANSI_RESET", newMessageType = MessageType.InterTransitStage, distanceFromEarthQuintile = 3)
             degradeAndSendComponentsMessages("inter transit stage 2")
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             System.err.println("$id 3")
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId $ANSI_RED inter transit stage 3 $ANSI_RESET in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name}", newMessageType = MessageType.InterTransit,  distanceFromEarthQuintile = 4)
+            missionNetworkService.sendMessage(messageContent = "$ANSI_GREEN Mission: $missionId $ANSI_RESET $ANSI_RED inter transit stage 3 $ANSI_RESET $ANSI_GREEN in progress: we are at ${currentDistanceFromController} millions km from the earth, we are at ${destination.distance - currentDistanceFromController} millions kms from destination: ${destination.name} $ANSI_RESET", newMessageType = MessageType.InterTransitStage,  distanceFromEarthQuintile = 4)
             degradeAndSendComponentsMessages("inter transit stage 3")
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
-            missionNetworkService.sendMessage(messageContent = "Mission: $missionId $ANSI_RED transit stage ended: $ANSI_RESET we are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached!", newMessageType = MessageType.TransitStage, distanceFromEarthQuintile = 5)
+            missionNetworkService.sendMessage(messageContent = "$ANSI_GREEN Mission: $missionId $ANSI_RESET $ANSI_RED transit stage ended: $ANSI_RESET w$ANSI_GREEN e are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached! $ANSI_RESET", newMessageType = MessageType.TransitStage, distanceFromEarthQuintile = 5)
             System.err.println("-------------------END-----------------------")
         }
         this.missionNetworkService.listenIncommingMessage()

@@ -51,7 +51,8 @@ object Utils {
     fun log(message: String?) {
         println(message)
         try {
-            Files.writeString(Paths.get(defaultLogFileName), message, StandardOpenOption.APPEND)
+            val messageWithoutANSI_ColorCodes = message?.replace("\u001B\\[[;\\d]*m", "");
+            Files.writeString(Paths.get(defaultLogFileName), messageWithoutANSI_ColorCodes + "\n", StandardOpenOption.APPEND)
         } catch (e: IOException) {
             System.err.println("A file error occured while appending the text.")
             e.printStackTrace()

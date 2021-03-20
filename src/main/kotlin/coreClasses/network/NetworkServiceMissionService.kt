@@ -1,5 +1,7 @@
 package coreClasses.network
 
+import utils.ANSI_PURPLE
+import utils.ANSI_RESET
 import utils.Utils
 
 //TODO
@@ -11,7 +13,12 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
             msg = this.networkChannel.messageQueue.firstOrNull()
 
             if (msg?.emitterType == EmitterType.Controller) {
-                Utils.log(msg.content)
+
+                if (msg.messageType == MessageType.SoftwareUpdate) {
+                    Utils.log("\n$ANSI_PURPLE ${msg.content} $ANSI_RESET \n")
+                } else {
+                    Utils.log(msg.content)
+                }
                 //println(msg.content)
                 this.networkChannel.messageQueue.poll()
                 return msg

@@ -1,5 +1,7 @@
 package coreClasses.network
 
+import utils.ANSI_RED
+import utils.ANSI_RESET
 import utils.Utils
 
 class NetworkServiceControllerService(override var networkChannel: NetworkChannel) : NetworkService() {
@@ -8,8 +10,6 @@ class NetworkServiceControllerService(override var networkChannel: NetworkChanne
         var msg: Message? = networkChannel.messageQueue.firstOrNull()
 
         if (msg?.emitterType == EmitterType.Mission) {
-            // println(msg.content)
-            Utils.log(msg.content)
             networkChannel.messageQueue.poll()
         }
         return msg

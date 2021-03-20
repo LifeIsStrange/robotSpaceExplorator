@@ -30,12 +30,13 @@ enum class MessageType {
     Telemetry,
     SoftwareUpdate,
     BoostStage,
-    InterTransit,
+    InterTransitStage,
     TransitStage,
     LandingStage,
     ExplorationStage,
     Failure,
-    SucessfullSoftwareUpdate
+    SucessfullSoftwareUpdate,
+    AbortMission
 }
 
 

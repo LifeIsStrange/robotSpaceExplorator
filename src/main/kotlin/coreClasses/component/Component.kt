@@ -1,4 +1,4 @@
-package coreClasses
+package coreClasses.component
 
 import coreClasses.network.MessageType
 import coreClasses.network.NetworkServiceMissionService
