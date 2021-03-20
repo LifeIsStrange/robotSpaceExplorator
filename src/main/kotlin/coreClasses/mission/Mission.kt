@@ -3,7 +3,7 @@ package coreClasses.mission
 import coreClasses.component.Component
 import coreClasses.network.MessageType
 import coreClasses.network.NetworkChannel
-import coreClasses.network.NetworkServiceMissionService
+import coreClasses.network.NetworkMissionService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -22,7 +22,7 @@ class Mission(
     private var destination: Destination,
     private var possibleFailureException: AtomicReference<Exception?>
 ) : Runnable {
-    private var missionNetworkService = NetworkServiceMissionService(networkChannel)
+    private var missionNetworkService = NetworkMissionService(networkChannel)
     var currentDistanceFromController = 0f
 
     companion object {

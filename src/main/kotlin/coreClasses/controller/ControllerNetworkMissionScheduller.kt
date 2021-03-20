@@ -3,7 +3,7 @@ package coreClasses.controller
 import coreClasses.network.EmitterType
 import coreClasses.network.MessageType
 import coreClasses.network.NetworkChannel
-import coreClasses.network.NetworkServiceControllerService
+import coreClasses.network.NetworkControllerService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import utils.*
@@ -14,7 +14,7 @@ class ControllerNetworkMissionScheduller(
     private var missionsExecutor: ExecutorService
 ) : Runnable {
 
-    val controllerNetworkService = NetworkServiceControllerService(networkChannel)
+    val controllerNetworkService = NetworkControllerService(networkChannel)
 
     override fun run() {
         while (!this.missionsExecutor.isTerminated) {

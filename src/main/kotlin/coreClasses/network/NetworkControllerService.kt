@@ -1,6 +1,6 @@
 package coreClasses.network
 
-class NetworkServiceControllerService(override var networkChannel: NetworkChannel) : NetworkService() {
+class NetworkControllerService(override var networkChannel: NetworkChannel) : NetworkService() {
 
     override fun listenIncommingMessage(): Message? {
         val msg: Message? = networkChannel.messageQueue.firstOrNull()

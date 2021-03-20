@@ -4,7 +4,7 @@ import utils.ANSI_PURPLE
 import utils.ANSI_RESET
 import utils.Utils
 
-class NetworkServiceMissionService(override var networkChannel: NetworkChannel) : NetworkService() {
+class NetworkMissionService(override var networkChannel: NetworkChannel) : NetworkService() {
     fun receiveStageAnswer(): Message? {
         var msg: Message?
 
