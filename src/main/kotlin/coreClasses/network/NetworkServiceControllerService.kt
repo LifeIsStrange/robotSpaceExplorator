@@ -6,8 +6,8 @@ import utils.Utils
 
 class NetworkServiceControllerService(override var networkChannel: NetworkChannel) : NetworkService() {
 
-    public override fun listenIncommingMessage(): Message? {
-        var msg: Message? = networkChannel.messageQueue.firstOrNull()
+    override fun listenIncommingMessage(): Message? {
+        val msg: Message? = networkChannel.messageQueue.firstOrNull()
 
         if (msg?.emitterType == EmitterType.Mission) {
             networkChannel.messageQueue.poll()
@@ -15,7 +15,7 @@ class NetworkServiceControllerService(override var networkChannel: NetworkChanne
         return msg
     }
 
-    public override suspend fun sendMessage(
+    override suspend fun sendMessage(
         receivedMessageType: MessageType?,
         messageContent: String,
         newMessageType: MessageType,
@@ -25,7 +25,6 @@ class NetworkServiceControllerService(override var networkChannel: NetworkChanne
         if (receivedMessageType != MessageType.ExplorationStage) {
             val sizeMessage = this.getPayloadSizeForMessageType(newMessageType)
 
-            //FIXME : remove comments
             this.simulateTimeToTransferMessage(sizeMessage, distanceFromEarthQuintile)
             this.networkChannel.messageQueue.add(
                 Message(

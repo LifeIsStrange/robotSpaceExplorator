@@ -4,10 +4,9 @@ import utils.ANSI_PURPLE
 import utils.ANSI_RESET
 import utils.Utils
 
-//TODO
 class NetworkServiceMissionService(override var networkChannel: NetworkChannel) : NetworkService() {
     fun receiveStageAnswer(): Message? {
-        var msg: Message? = null
+        var msg: Message?
 
         while (true) {
             msg = this.networkChannel.messageQueue.firstOrNull()
@@ -19,19 +18,18 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
                 } else {
                     Utils.log(msg.content)
                 }
-                //println(msg.content)
                 this.networkChannel.messageQueue.poll()
                 return msg
             }
         }
-        return msg
+        // unreachable
     }
 
     override fun listenIncommingMessage(): Message? {
         return this.receiveStageAnswer()
     }
 
-    public override suspend fun sendMessage(
+    override suspend fun sendMessage(
         receivedMessageType: MessageType?,
         messageContent: String,
         newMessageType: MessageType,
@@ -40,7 +38,6 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
         this.setBestPossibleAvailableNetworkBandWidth()
         val sizeMessage = this.getPayloadSizeForMessageType(newMessageType)
 
-        //FIXME : remove comments
 
         this.simulateTimeToTransferMessage(sizeMessage, distanceFromEarthQuintile)
         this.networkChannel.messageQueue.offer(

@@ -11,16 +11,9 @@ import utils.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**
- * this class is responsible for the scheduling of a Mission
+ * this class is responsible for the scheduling of a Mission through network messages with the Controller (Earth)
  */
-// todo get random destination and network
-// todo fix fuel mismatch
 class Destination(val name: String, val distance: Float)
-
-//TODO change thread name by ID
-//TODO log dans output
-//TODO change mission à 10
-//TODO changer gérer le temps
 
 class Mission(
     val id: Id,
@@ -42,12 +35,13 @@ class Mission(
 
     override fun run() {
         try {
+            // yes this identifier is a simplification for debugging and a thread can actually be shared between multiples tasks
             this.missionId = Thread.currentThread().name
-            println(Thread.currentThread().name + " Mission starting.")
-            println("---------")
+            Utils.log(Thread.currentThread().name + " Mission starting.")
+            Utils.log("---------")
             scheduleStages()
         } catch (e: Exception) {
-            System.err.println("je catch l'erreur et je la fou dans l'attmic")
+            Utils.log("$ANSI_RED je catch l'erreur in an AtomicReference $ANSI_RESET")
             this.possibleFailureException.set(e)
         }
     }
@@ -70,10 +64,9 @@ class Mission(
                 GlobalScope.launch {
                     missionNetworkService.sendMessage(
                         messageContent = "Mission $missionId has sucessfully recovered from the software update",
-                        newMessageType = MessageType.SucessfullSoftwareUpdate
+                        newMessageType = MessageType.SuccessfulSoftwareUpdate
                     )
                 }
-                //todo dire success
             }
         }
     }
@@ -86,6 +79,11 @@ class Mission(
             }
         }
     }
+
+    // A variable burst of reports and
+    // commands are sent at the transition between mission stages.
+    // There are a variable number of types
+    // of commands and reports for each mission.
     private fun scheduleStages() {
         this.boostStage()
         this.degradeAndSendComponentsMessages("after boost stage")
@@ -109,13 +107,9 @@ class Mission(
                 newMessageType = MessageType.BoostStage
             )
         }
-        // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating boost stage", EmitterType.Mission, MessageType.Boost))
         this.missionNetworkService.listenIncommingMessage()
     }
-    // A variable burst of reports and
-    // commands are sent at the transition between mission stages.
-    // There are a variable number of types
-    // of commands and reports for each mission.
+
     private fun transitStage() {
         val transitStepTime = Utils.getRandomNumberInRange(defaultMinStageTime, defaultMaxStageTime) / 4
         println(Thread.currentThread().name + " entering interplanetary transit stage..")
@@ -140,13 +134,13 @@ class Mission(
             Utils.delay(transitStepTime)
             currentDistanceFromController += destinationDistanceQuartile
             missionNetworkService.sendMessage(messageContent = "$ANSI_GREEN Mission: $missionId $ANSI_RESET $ANSI_RED transit stage ended: $ANSI_RESET w$ANSI_GREEN e are at ${currentDistanceFromController} millions km from the earth, destination: ${destination.name} has been reached! $ANSI_RESET", newMessageType = MessageType.TransitStage, distanceFromEarthQuintile = 5)
-            System.err.println("-------------------END-----------------------")
+            System.err.println("-------------------END OF TRANSIT-----------------------")
         }
         this.missionNetworkService.listenIncommingMessage()
     }
 
     private fun landingStage() {
-        println(Thread.currentThread().name + " entering landing stage..")
+        Utils.log(Thread.currentThread().name + " entering landing stage..")
         GlobalScope.launch {
             missionNetworkService.sendMessage(
                 messageContent = "${Thread.currentThread().name} terminating landing stage",
@@ -157,9 +151,6 @@ class Mission(
         this.missionNetworkService.listenIncommingMessage()
     }
 
-    // Time can simulated by allowing a fixed ratio of wall clock time to mission time eg 1 sec : 1
-    // month.
-    // When waiting a mission 'sleeps'.
     private fun explorationStage() {
         println(Thread.currentThread().name + " entering exploration stage..")
         runBlocking {
@@ -172,6 +163,5 @@ class Mission(
                 distanceFromEarthQuintile = 5
             )
         }
-        // this.networkChannel.messageQueue.offer(Message(content = "${Thread.currentThread().name} terminating transit stage", EmitterType.Mission, MessageType.Exploration))
     }
 }

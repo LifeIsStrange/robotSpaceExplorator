@@ -11,5 +11,5 @@ object RobotSpaceExplorator {
 fun main(args: Array<String>) {
     RobotSpaceExplorator.createConfigFile()
 
-    val controller = Controller()
+    Controller()
 }
