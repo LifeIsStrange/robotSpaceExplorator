@@ -1,5 +1,7 @@
 output.dat
 
+*.jar
+
 HELP.md
 .gradle
 build/

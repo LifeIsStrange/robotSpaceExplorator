@@ -1,9 +1,5 @@
 package coreClasses.network
 
-import utils.ANSI_RED
-import utils.ANSI_RESET
-import utils.Utils
-
 class NetworkServiceControllerService(override var networkChannel: NetworkChannel) : NetworkService() {
 
     override fun listenIncommingMessage(): Message? {

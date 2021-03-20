@@ -24,7 +24,7 @@ sealed class Component() {
     open suspend fun sendMessage(networkServiceMissionService: NetworkServiceMissionService, currentStage: String?) {}
 
     fun degradeComponentProperty(value: Int): Int {
-        val newVal = value / Utils.getRandomNumberInRange(4f, 9f).toInt();
+        val newVal = value / Utils.getRandomNumberInRange(4f, 9f).toInt()
         return value - newVal
     }
     open fun degradeComponent() {}
@@ -41,10 +41,13 @@ class Fuel(var quantity: Int = 1000) : Component() {
     override fun degradeComponent() {
         this.quantity -= this.degradeComponentProperty(this.quantity)
     }
-
 }
 
-class Thruster(var power: Int = 0, var damageLevel: Int = 0, var heatLevel: Int = 1000, var isOn: Boolean = false
+class Thruster(
+    var power: Int = 0,
+    var damageLevel: Int = 0,
+    var heatLevel: Int = 1000,
+    var isOn: Boolean = false
 ) : Component() {
     override suspend fun sendMessage(
         networkServiceMissionService: NetworkServiceMissionService,

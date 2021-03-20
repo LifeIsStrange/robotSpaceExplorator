@@ -38,7 +38,6 @@ class NetworkServiceMissionService(override var networkChannel: NetworkChannel) 
         this.setBestPossibleAvailableNetworkBandWidth()
         val sizeMessage = this.getPayloadSizeForMessageType(newMessageType)
 
-
         this.simulateTimeToTransferMessage(sizeMessage, distanceFromEarthQuintile)
         this.networkChannel.messageQueue.offer(
             Message(

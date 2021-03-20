@@ -21,7 +21,6 @@ const val ANSI_PURPLE = "\u001B[35m"
 const val ANSI_CYAN = "\u001B[36m"
 const val ANSI_WHITE = "\u001B[37m"
 
-
 object Utils {
     var defaultLogFileName = "output.dat"
 
@@ -51,7 +50,7 @@ object Utils {
     fun log(message: String?) {
         println(message)
         try {
-            val messageWithoutANSI_ColorCodes = message?.replace("\u001B\\[[;\\d]*m", "");
+            val messageWithoutANSI_ColorCodes = message?.replace("\u001B\\[[;\\d]*m", "")
             Files.writeString(Paths.get(defaultLogFileName), messageWithoutANSI_ColorCodes + "\n", StandardOpenOption.APPEND)
         } catch (e: IOException) {
             System.err.println("A file error occured while appending the text.")
@@ -78,7 +77,6 @@ object Utils {
     suspend fun delay(time: MilliSeconds) {
         delay(time.toLong())
     }
-
 }
 inline fun <reified T : Enum<T>> T.next(): T {
     val values = enumValues<T>()

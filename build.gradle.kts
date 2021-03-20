@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -6,6 +7,7 @@ plugins {
     // kotlin("jvm") version "1.4.31"
     kotlin("jvm") version "1.4.21"
     id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "org.example"
@@ -27,5 +29,22 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
+        // languageVersion = "1.5"
+    }
+}
+
+tasks {
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("robotSpaceExplorator")
+        mergeServiceFiles()
+        isZip64 = true // needed for hive-jdbc, do not enable if not needed
+        manifest {
+            attributes(mapOf("Main-Class" to "RobotSpaceExploratorKt"))
+        }
+    }
+}
+tasks {
+    build {
+        dependsOn(shadowJar)
     }
 }

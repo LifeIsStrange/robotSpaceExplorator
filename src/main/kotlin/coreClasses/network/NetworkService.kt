@@ -1,7 +1,5 @@
 package coreClasses.network
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import utils.Id
 import utils.KBs
@@ -19,7 +17,7 @@ abstract class NetworkService {
     protected var networkBandWidth: NetworkBandWidth = NetworkBandWidth.SLOW
 
     init {
-       this.setBestPossibleAvailableNetworkBandWidth()
+        this.setBestPossibleAvailableNetworkBandWidth()
     }
 
     fun addHeaderToMessageContent(messageContent: String, sizeMessage: Float, missionId: Id, messageType: MessageType): String {
@@ -27,13 +25,13 @@ abstract class NetworkService {
     }
 
     fun getPayloadSizeForMessageType(messageType: MessageType): KBs {
-       return when {
-           messageType.name.endsWith("Stage") || messageType == MessageType.Failure -> Utils.getRandomNumberInRange(0f, 1f)
-           messageType == MessageType.Telemetry -> Utils.getRandomNumberInRange(10f, 100f)
-           messageType == MessageType.Data -> Utils.getRandomNumberInRange(100f, 100000f)
-           messageType == MessageType.SoftwareUpdate -> Utils.getRandomNumberInRange(1000f, 10000f)
-           else -> Utils.getRandomNumberInRange(0f, 1f)
-       }
+        return when {
+            messageType.name.endsWith("Stage") || messageType == MessageType.Failure -> Utils.getRandomNumberInRange(0f, 1f)
+            messageType == MessageType.Telemetry -> Utils.getRandomNumberInRange(10f, 100f)
+            messageType == MessageType.Data -> Utils.getRandomNumberInRange(100f, 100000f)
+            messageType == MessageType.SoftwareUpdate -> Utils.getRandomNumberInRange(1000f, 10000f)
+            else -> Utils.getRandomNumberInRange(0f, 1f)
+        }
     }
 
     fun simulateTimeToTransferMessage(sizeMessage: KBs, distanceFromEarthQuartile: Int) {
@@ -44,7 +42,7 @@ abstract class NetworkService {
             }
             Utils.delay(timeToDelay.toFloat())
         }
-   }
+    }
     fun setBestPossibleAvailableNetworkBandWidth() {
         if (Utils.getRandomNumberInRange(0f, 100f) <= 80f) {
             this.networkBandWidth = NetworkBandWidth.SPEED
@@ -54,7 +52,7 @@ abstract class NetworkService {
     }
 
     fun getTotalTimeForAMessageToTransmit(payloadSize: KBs, distanceFromEarthQuintile: Int): MilliSeconds {
-       return payloadSize / networkBandWidth.value * 1000 * distanceFromEarthQuintile
+        return payloadSize / networkBandWidth.value * 1000 * distanceFromEarthQuintile
     }
 
     abstract fun listenIncommingMessage(): Message?

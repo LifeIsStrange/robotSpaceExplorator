@@ -32,12 +32,11 @@ enum class MessageType {
     AbortMission
 }
 
-
 class Message(
     val content: String,
     val emitterType: EmitterType,
     val messageType: MessageType,
-    var payloadSize: Float //kb
+    var payloadSize: Float // kb
 )
 
 class NetworkChannel(
